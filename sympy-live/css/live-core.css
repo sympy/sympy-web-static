@@ -1,20 +1,12 @@
-button {
-    background: #e4ebe4;
-    border: 1px solid #000;
-    padding: 0.5em;
-    border-radius: 4px;
-    color: #3b5526;
-}
-
 .sympy-live-output {
     font-family: monospace;
-    font-size: 10pt;
-    margin: 0 0 10px 0;
-    padding: 5px;
-    width: 95%;
-    height: 20em;
+    font-size: 12pt;
+    margin: 0;
+    padding: 0.25em;
+    width: 99%;
+    height: 25em;
     overflow: auto;
-    border: 1px solid silver;
+    border: 0;
     background-color: #f5f5f5;
 }
 
@@ -28,8 +20,8 @@ button {
 
 .sympy-live-caret {
     font-family: monospace;
-    font-size: 10pt;
-    width: 2.5em;
+    font-size: 12pt;
+    width: 5%;
     border: 1px solid silver;
     margin: 0;
     padding: 5px;
@@ -44,8 +36,8 @@ button {
 
 .sympy-live-prompt {
     font-family: monospace;
-    font-size: 10pt;
-    width: 88.5%;
+    font-size: 12pt;
+    width: 93%;
     border: 1px solid silver;
     margin: 0;
     padding: 5px;
@@ -67,25 +59,32 @@ button {
 .sympy-live-toolbar > * {
     margin-bottom: 0.5em;
 }
-.sympy-live-toolbar > button {
-  margin-right: 0.5em;
+
+button {
+  font-family: 'Open Sans', sans-serif;
+  border: 1px solid #552634;
+  color: #FFF;
+  padding: 0.25em;
+  margin: 0;
+  background-color: #552634;
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#40252D, endColorstr=#370C19);
   -moz-transition: all .5s ease-out;
   -webkit-transition: all .5s ease-out;
   -o-transition: all .5s ease-out;
   transition: all .5s ease-out;
-  background-color: #3b5526;
-  color: #FFF;
-  font-weight: bold;
 }
-.sympy-live-toolbar > button:hover {
-  background-color: #5B7745;
-  -moz-transition: all .2s ease-in;
-  -webkit-transition: all .2s ease-in;
-  -o-transition: all .2s ease-in;
-  transition: all .2s ease-in;
+
+button:hover {
+  background: #370C19;
 }
+
+.sympy-live-toolbar > button {
+  margin-right: 0.5em;
+  padding: 0.4em;
+}
+
 .sympy-live-toolbar > button:first-child {
-  background-color: #81B953;
+  font-weight: bold;
 }
 
 .sympy-live-processing {
@@ -125,7 +124,6 @@ button {
   border: 1px solid #81B953;
   background-color: #FFF;
   padding: 0.5em;
-  font-weight: bold;
 }
 
 .sympy-live-dialog div p {
@@ -141,15 +139,26 @@ button {
 
 #make-one-off-button {
   float: right;
-  background-image: url('/static/make_url.png');
-  width: 24px;
+  background-image: url('/static/sympy-live/images/make_url.png');
+  width: 32px;
   border: 0;
   background-color: transparent;
   padding: 0;
-  height: 24px;
+  height: 32px;
   background-size: 100%;
 }
 
 #make-one-off-button:hover {
   background-color: #AAA;
+}
+
+#settings label {
+  display: inline-block;
+  width: 35%;
+}
+
+#settings select {
+  width: 50%;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9em;
 }

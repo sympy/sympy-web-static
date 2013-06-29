@@ -1,17 +1,14 @@
-function makeTransition(elemId, arrowId, closedHeight, openHeight) {
-    return (function(){
-        var closedHeight = 35;
-        // relies on parseInt ignoring invalid trailing content
-        var margin = parseInt($('.content').css('margin-top'), 10);
-        var openHeight = $(elemId + ' .content').height() + margin;
-        var elem = $(elemId), arrow = $(arrowId);
-        if (elem.height() === closedHeight) {
-            elem.addClass('clicked').height(openHeight);
-            arrow.addClass('clicked');
+function makeTransition(elemId) {
+    var elem = $(elemId + ' > .content');
+    var visible = true;
+    return (function() {
+        if (!visible) {
+            elem.addClass('clicked').slideDown();
+            visible = true;
         }
         else {
-            elem.removeClass('clicked').height(closedHeight);
-            arrow.removeClass('clicked');
+            elem.removeClass('clicked').slideUp();
+            visible = false;
         }
     });
 }
@@ -19,9 +16,7 @@ function makeTransition(elemId, arrowId, closedHeight, openHeight) {
 $(document).ready(function(){
     $('.clickable_top').each(function(i, elem){
         var elem_id = $(elem).parents('div').first().attr('id');
-        var arrow_id = elem_id + '_arrow';
-        $('#' + arrow_id).addClass('arrow');
-        $(elem).click(makeTransition('#' + elem_id, '#' + arrow_id));
+        $(elem).click(makeTransition('#' + elem_id));
     });
 
     setTimeout(function() {
@@ -38,7 +33,7 @@ function clear_searches(){
         $.get((this.basePath || '') + '/delete',
               null,
               function(data) {
-                  $('#saved_searches').html(data);
+                  $('#saved_searches').html(data).delay(1000).fadeOut(500);
               });
     }
 }

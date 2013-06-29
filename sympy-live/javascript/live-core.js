@@ -315,36 +315,40 @@ SymPy.Shell = Class.$extend({
         this.toolbarEl = $('<p/>').
             addClass('sympy-live-toolbar').
             append(
-                $('<label for="output-format">Output Format: </label>'),
-                $('<select id="output-format"/>').append(
-                    $('<option value="repr">Repr</option>'),
-                    $('<option value="str">Str</option>'),
-                    $('<option value="ascii">ASCII</option>'),
-                    $('<option value="unicode">Unicode</option>'),
-                    $('<option value="latex">LaTeX</option>')
-                ),
-                $('<br/>'),
-                $('<label for="submit-behavior">Submit with: </label>'),
-                $('<select id="submit-behavior"/>').append(
-                    $('<option value="enter">Enter</option>'),
-                    $('<option value="shift-enter">Shift-Enter</option>')
-                ),
-                $('<label for="privacy">Privacy: </label>'),
-                $('<select id="privacy"/>').append(
-                    $('<option value="on">On</option>'),
-                    $('<option value="off">Off</option>')
-                ),
-                $('<br/>'),
-                $('<select id="autocomplete"/>').append(
-                    $('<option value="tab">Tab</option>'),
-                    $('<option value="ctrl-space">Ctrl-Space</option>')
-                ),
-                $('<label for="autocomplete"> completes</label>'),
-                $('<br/>'),
-                $('<label for="desktop">Force Desktop Version: </label>'),
-                $('<input type="checkbox" id="desktop"/>'),
-                $('<br/>'),
-                $('<span>Ctrl-Up/Down for history</span>')
+                $('<div/>').append([
+                    $('<label for="output-format">Output Format</label>'),
+                    $('<select id="output-format"/>').append(
+                        $('<option value="repr">Repr</option>'),
+                        $('<option value="str">Str</option>'),
+                        $('<option value="ascii">ASCII</option>'),
+                        $('<option value="unicode">Unicode</option>'),
+                        $('<option value="latex">LaTeX</option>')
+                    )
+                ]),
+                $('<div/>').append([
+                    $('<label for="submit-behavior">Submit with</label>'),
+                    $('<select id="submit-behavior"/>').append(
+                        $('<option value="enter">Enter</option>'),
+                        $('<option value="shift-enter">Shift-Enter</option>')
+                    )
+                ]),
+                $('<div/>').append([
+                    $('<label for="privacy">Privacy</label>'),
+                    $('<select id="privacy"/>').append(
+                        $('<option value="on">On</option>'),
+                        $('<option value="off">Off</option>')
+                    )
+                ]),
+                $('<div/>').append([
+                    $('<label for="autocomplete">Complete with</label>'),
+                    $('<select id="autocomplete"/>').append(
+                        $('<option value="tab">Tab</option>'),
+                        $('<option value="ctrl-space">Ctrl-Space</option>')
+                    )
+                ]),
+                $('<div/>').append([
+                    $('<span>Ctrl-Up/Down for history</span>')
+                ])
             ).
             appendTo(settings);
         this.supportsSelection = 'selectionStart' in this.promptEl.get(0);
@@ -930,7 +934,7 @@ SymPy.Shell = Class.$extend({
             appendTo(".sympy-live-completions-toolbar");
 
         var shell = $('#shell'),
-            leftdiv = $('#left'),
+            leftdiv = $('#main'),
             ld = {
                 pos : leftdiv.offset(),
                 width : '55%',
@@ -995,6 +999,7 @@ SymPy.Shell = Class.$extend({
             $('html, body').animate({ scrollTop: 0 }, 100);
             fullscreenResize();
 
+            var id = 0;
             // window resizing -> new dimensions
             $(window).on("resize", function() {
                 // information about this timeout:
@@ -1021,7 +1026,7 @@ SymPy.Shell = Class.$extend({
     closeFullscreen : function(ld) {
         if(this.fullscreenMode){
             var shell = $('#shell'),
-                leftdiv = $('#left');
+                leftdiv = $('#main');
             $('#shell').css('padding', 0);
             $('body').css('overflow', 'auto');
             $('.right_title').css('padding-top', 0);
