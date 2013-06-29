@@ -1,10 +1,10 @@
 * {margin:0;padding:0}
 .clear { clear: both; height: 0; }
 
-h1 { margin: 15px 0; font-size: 22px; font-weight: normal; }
-h2 { font-size: 22px; margin: 15px 0; font-weight: normal;}
-h3 { font-size: 18px; margin: 10px 0; font-weight: normal;}
-h4 { font-size: 16px; margin: 10px 0; font-weight: normal;}
+h1 { margin: 15px 0; font-size: 1.375em; font-weight: normal; }
+h2 { font-size: 1.375em; margin: 15px 0; font-weight: normal;}
+h3 { font-size: 1.125em; margin: 10px 0; font-weight: normal;}
+h4 { font-size: 1em; margin: 10px 0; font-weight: normal;}
 hr {height: 1px; border: 0; }
 p { margin: 15px 0;}
 a img { border: none; }
@@ -24,11 +24,17 @@ a img { border: none; }
 
 #header h1 {
   margin: 0;
-  font-size: 35px;
+  font-size: 2.1875em;
 }
 
 #header h1 a:link, #header h1 a:active, #header h1 a:hover, #header h1 a:visited {
   text-decoration: none;
+}
+
+#header img {
+  vertical-align: middle;
+  height: 78px;
+  width: 100px;
 }
 
 #main {
@@ -122,13 +128,13 @@ a img { border: none; }
 }
 
 #main-navigation ul li a {
-  font-size: 15px;
+  font-size: 0.95em;
   display: block;
   padding: 8px 15px;
 }
 
 .secondary-navigation {
-  font-size: 13px;
+  font-size: 0.8125em;
   border-bottom-width: 10px;
   border-bottom-style: solid;
 }
@@ -167,8 +173,6 @@ a img { border: none; }
   font-weight: 300;
   border: 1px solid #777;
   margin: auto;
-  height: 30px;
-  line-height: 20px;
   padding: 0.25em 0.5em;
   font-size: 1em;
 }
@@ -350,21 +354,34 @@ ul {
 
 /* Phones */
 @media screen and (max-device-width: 767px) {
+  body {
+    font-size: 1.5em !important;
+  }
+
+  pre {
+    overflow: auto;
+  }
+  
   #container {
     min-width: 100%;
     width: 100%;
   }
 
   #wrapper {
-    padding: 0 10px;
+    padding: 0;
+    position: relative;
+    top: 2.5em;
   }
 
   #header {
     padding: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
   }
 
   #header h1 {
-    font-size: 2em;
+    font-size: 1.5em;
     display: inline-block;
     width: auto;
     float: left;
@@ -376,7 +393,7 @@ ul {
   }
 
   #mobile-menu {
-    background: url(/media/mobile-menu.png) 5px 5px / 50px 50px no-repeat;
+    background: url(/static/images/mobile-menu.png) 5px 5px / 50px 50px no-repeat;
     width: 59px;
     height: 59px;
     display: inline-block;
@@ -421,5 +438,9 @@ ul {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
     border: 1px solid #CCC;
+  }
+
+  #main .content {
+    border: 0;
   }
 }

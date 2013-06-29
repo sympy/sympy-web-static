@@ -1,7 +1,6 @@
 $(document).ready(function() {
     if (screen.width <= 767) {
         var el = $('#main-navigation ul');
-        var height = el.height();
         var visible = false;
         el.hide();
 
@@ -12,6 +11,8 @@ $(document).ready(function() {
                 visible = false;
             }
             else {
+                var height = el.show().css('height', 'auto').height();
+                el.hide();
                 el.show().height(height).css('opacity', 1);
                 visible = true;
             }
