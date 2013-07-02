@@ -262,10 +262,6 @@ button:hover {
     display: none;
   }
 
-  #main .block .content, #footer .block {
-    min-width: 100%;
-  }
-
   .sympy-live-output, .sympy-live-caret, .sympy-live-prompt {
     font-size: 1em;
   }
@@ -276,5 +272,5 @@ button:hover {
 
   .sympy-live-prompt {
     width: 78%;
-  } 
+  }
 }
