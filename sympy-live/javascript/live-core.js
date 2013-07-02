@@ -157,6 +157,8 @@ SymPy.Shell = Class.$extend({
             this.banner = SymPy.rstrip(this.banner) + '\n\n';
         }
 
+        this.isMobile = window.matchMedia("screen and (max-width: 767px)").matches;
+
         var index;
 
         index = this.printerTypes.indexOf(config.printer);
@@ -167,14 +169,6 @@ SymPy.Shell = Class.$extend({
 
         index = this.recordTypes.indexOf(config.record);
         this.record = (index == -1) ? this.getCookie('sympy-privacy', 'on') : config.record;
-
-        if (typeof config.forcedesktop !== "undefined" &&
-            config.forcedesktop !== null) {
-            this.forcedesktop = config.forcedesktop
-        }
-        else {
-            this.forcedesktop = this.getCookie('desktop', false);
-        }
 
         index = this.autocompleteTypes.indexOf(config.autocomplete);
         this.autocomplete = (index == -1) ?
@@ -268,10 +262,6 @@ SymPy.Shell = Class.$extend({
             this.focus();
         }, this));
 
-        this.fullscreenEl.click($.proxy(function(event) {
-            this.fullscreen();
-        }, this));
-
         this.makeOneOffEl.click($.proxy(function(event) {
             this.makeOneOffURL();
         }, this));
@@ -291,22 +281,21 @@ SymPy.Shell = Class.$extend({
             this.focus();
         }, this));
 
-        this.autocompleteEl.change($.proxy(function(event) {
-            this.updateSettings();
-            this.focus();
-        }, this));
-
         this.recordEl.change($.proxy(function(event) {
             this.updateSettings();
             this.focus();
         }, this));
 
-	    this.forcedesktopEl.change($.proxy(function(event) {
-            this.updateSettings();
-            this.focus();
-        }, this));
+        if (!this.isMobile) {
+            this.autocompleteEl.change($.proxy(function(event) {
+                this.updateSettings();
+                this.focus();
+            }, this));
 
-        this.focus();
+            this.fullscreenEl.click($.proxy(function(event) {
+                this.fullscreen();
+            }, this));
+        }
 
         setInterval($.proxy(this.updatePrompt, this), 100);
     },
@@ -338,25 +327,13 @@ SymPy.Shell = Class.$extend({
                         $('<option value="on">On</option>'),
                         $('<option value="off">Off</option>')
                     )
-                ]),
-                $('<div/>').append([
-                    $('<label for="autocomplete">Complete with</label>'),
-                    $('<select id="autocomplete"/>').append(
-                        $('<option value="tab">Tab</option>'),
-                        $('<option value="ctrl-space">Ctrl-Space</option>')
-                    )
-                ]),
-                $('<div/>').append([
-                    $('<span>Ctrl-Up/Down for history</span>')
                 ])
-            ).
-            appendTo(settings);
+            );
+        this.toolbarEl.appendTo(settings);
         this.supportsSelection = 'selectionStart' in this.promptEl.get(0);
         this.printerEl = this.toolbarEl.find('select:nth(0)');
         this.submitEl = this.toolbarEl.find('select:nth(1)');
         this.recordEl = this.toolbarEl.find('select:nth(2)');
-        this.autocompleteEl = this.toolbarEl.find('select:nth(3)');
-        this.forcedesktopEl = this.toolbarEl.find('input');
         var index;
 
         index = this.printerTypes.indexOf(this.printer);
@@ -368,11 +345,22 @@ SymPy.Shell = Class.$extend({
         index = this.recordTypes.indexOf(this.record);
         this.recordEl.children('option')[index].selected = true;
 
-        index = this.autocompleteTypes.indexOf(this.autocomplete);
-        this.autocompleteEl.children('option')[index].selected = true;
-
-        if (this.forcedesktop === "true") {
-            this.forcedesktopEl.prop("checked", true);
+        if (!this.isMobile) {
+            this.toolbarEl.append([
+                $('<div/>').append([
+                    $('<label for="autocomplete">Complete with</label>'),
+                    $('<select id="autocomplete"/>').append(
+                        $('<option value="tab">Tab</option>'),
+                        $('<option value="ctrl-space">Ctrl-Space</option>')
+                    )
+                ]),
+                $('<div/>').append([
+                    $('<span>Ctrl-Up/Down for history</span>')
+                ])
+            ]);
+            this.autocompleteEl = this.toolbarEl.find('select:nth(3)');
+            index = this.autocompleteTypes.indexOf(this.autocomplete);
+            this.autocompleteEl.children('option')[index].selected = true;
         }
     },
     renderButtons: function(el) {
@@ -384,9 +372,13 @@ SymPy.Shell = Class.$extend({
             appendTo(this.buttonsEl);
         this.clearEl = $('<button>Clear</button>').
             appendTo(this.buttonsEl);
-        this.fullscreenEl = $('<button>Fullscreen</button>').
-            attr('id', 'fullscreen-button').
-            appendTo(this.buttonsEl);
+
+        if (!this.isMobile) {
+            this.fullscreenEl = $('<button>Fullscreen</button>').
+                attr('id', 'fullscreen-button').
+                appendTo(this.buttonsEl);
+        }
+
         this.makeOneOffEl = $('<button></button>').
             attr('id', 'make-one-off-button').
             appendTo(this.buttonsEl).

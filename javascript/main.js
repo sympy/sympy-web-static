@@ -5,7 +5,6 @@ $(document).ready(function() {
         el.hide();
 
         $('#mobile-menu').click(function() {
-            console.log(visible);
             if (visible) {
                 el.height(0).css('opacity', 0);
                 window.setTimeout(function() {

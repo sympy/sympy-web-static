@@ -452,3 +452,20 @@ ul {
     border: 0;
   }
 }
+
+@media screen and (orientation: landscape) and (max-device-width: 767px) {
+  #header h1 {
+    font-size: 1em;
+  }
+
+  #header img {
+    height: 39px;
+    width: 50px;
+  }
+
+  #mobile-menu {
+    background-size: 30px 30px;
+    width: 39px;
+    height: 39px;
+  }
+}
