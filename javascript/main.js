@@ -4,11 +4,14 @@ $(document).ready(function() {
         var visible = false;
         el.hide();
 
-        $('#mobile-menu').bind('touchstart', function() {
+        $('#mobile-menu').click(function() {
+            console.log(visible);
             if (visible) {
                 el.height(0).css('opacity', 0);
-                window.setTimeout(function() { el.hide() }, 290);
-                visible = false;
+                window.setTimeout(function() {
+                    el.hide();
+                    visible = false;
+                }, 290);
             }
             else {
                 var height = el.show().css('height', 'auto').height();

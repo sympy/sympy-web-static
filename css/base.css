@@ -373,7 +373,7 @@ ul {
     padding: 0;
     position: fixed;
     width: 100%;
-    z-index: 100;
+    z-index: 1000;
   }
 
   #header h1 {
@@ -394,6 +394,14 @@ ul {
     height: 47px;
     display: inline-block;
     float: right;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 1000;
+  }
+
+  #mobile-menu:active {
+    background-color: #81B953;
   }
 
   #main-navigation {
@@ -417,6 +425,10 @@ ul {
 
   #main {
     width: 100%;
+  }
+
+  #main .block .content, #footer .block {
+    min-width: 100% !important;
   }
 
   #footer {
