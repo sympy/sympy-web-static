@@ -922,135 +922,87 @@ SymPy.Shell = Class.$extend({
     },
 
     fullscreen: function() {
-        var popup = $('<div class="sympy-live-fullscreen-popup">Escape to close fullscreen mode.</div>');
-        popup.css({
-            'font-size': 20,
-            'color' : '#fff',
-            'z-index' : 1000,
-            'position' : 'absolute'
-        });
+        if (!this.fullscreenMode) {
+            var popup = $('<div class="sympy-live-fullscreen-popup">Escape to close fullscreen mode.</div>');
+            popup.prependTo($(document.body)).css({
+                'font-size': 20,
+                'color' : '#fff',
+                'z-index' : 10000,
+                'position' : 'absolute',
+                left: $(window).width() / 2,
+                top: ($(window).height() - popup.height()) / 2
+            });
+            popup.delay(1000).fadeOut(300);
 
-        $("#sympy-live-toolbar-main").
-            appendTo(".sympy-live-completions-toolbar");
+            $("#sympy-live-toolbar-main").appendTo(".sympy-live-completions-toolbar");
 
-        var shell = $('#shell'),
-            leftdiv = $('#main'),
-            ld = {
-                pos : leftdiv.offset(),
-                width : '55%',
-                height : '560px',
-                border : 2
-            };
-
-        if(!(this.fullscreenMode)){
-            this.leftHeight = leftdiv.height();
-        }
-
-        if(this.fullscreenMode){
-            $(window).off("resize");
-            this.closeFullscreen(ld);
-            this.fullscreenMode = false;
-        }else{
             this.fullscreenMode = true;
 
-            function fullscreenResize(){
-                //browser viewport dimensions
-                var bheight = $(window).height(), bwidth = $(window).width();
-                leftdiv.css({
-                    'margin' : 0,
-                    'position' : 'absolute',
-                    'z-index' : 500,
-                    'background-color' : '#e4ebe4'
-                }).animate({
-                    'width' : bwidth,
-                    'height' : bheight,
-                    'top' : 0,
-                    'left' : 0,
-                    'border-width' : 0,
-                    'padding' : 0
-                }, 100);
-                var promptHeight = $('.sympy-live-prompt').outerHeight(true);
-                var completionHeight = $('.sympy-live-autocompletions-container')
-                    .outerHeight(true);
-                var toolbarHeight = $('.sympy-live-toolbar').outerHeight(true);
-                var titleHeight = $('.right_title').outerHeight(true);
-                var windowHeight = $(window).height();
-                var margins = $('.sympy-live-output').outerHeight(true) -
-                    $('.sympy-live-output').height();
-                var shellPadding = 20;
-                var height = windowHeight - (
-                    promptHeight + toolbarHeight + completionHeight +
-                        titleHeight + margins + shellPadding);
-                $('.sympy-live-output').css({
-                    'width' : bwidth-32,
-                    'height' : height
-                });
-            }
+            var main = $("#main");
+            main.addClass('fullscreen');
+            main.find('#sidebar').hide();
+            main.find('#footer').hide();
 
-            // some styles to make it look better
-            leftdiv.css({
-                'top' : ld.pos.top,
-                'left' : ld.pos.left
+            var overlay = $("<div />").appendTo($(document.body));
+            overlay.css({
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                left: 0,
+                top: 0,
+                background: '#DDD',
+                zIndex: 9999
+            }).attr('id', 'overlay').fadeOut(500);
+
+            $(document.body).css({
+                width: $(window).width(),
+                height: $(window).height(),
+                overflow: 'hidden'
             });
-            shell.css('padding', 10);
-            $('body').css('overflow', 'hidden');
-            $('.right_title').css('padding-top', 20);
 
-            $('html, body').animate({ scrollTop: 0 }, 100);
-            fullscreenResize();
+            var resize = function() {
+                var height = $("#shell").height() -
+                    2 * $('.sympy-live-prompt').outerHeight() -
+                    5 * $('.sympy-live-autocompletions-container').outerHeight();
+                if (height < 25 * 16) {
+                    // 25em * (16px / 1em), at least at 96dpi?
+                    height = 25 * 16;
+                }
+                $('.sympy-live-output').height(height);
+            };
 
-            var id = 0;
-            // window resizing -> new dimensions
-            $(window).on("resize", function() {
-                // information about this timeout:
-                // http://stackoverflow.com/questions/5534363/why-does-the-jquery-resize-event-fire-twice
-                clearTimeout(id);
-                id = setTimeout(function(){
-                    fullscreenResize();
-                }, 200);
-            });
-            $(popup).appendTo('body').hide().fadeIn(500).delay(1000).fadeOut(500);
+            $(window).resize(resize).resize();
 
             // enabling escape key to close fullscreen mode
             var keyEvent = this.getKeyEvent();
             $(document).on(keyEvent, $.proxy(function(event) {
                 if(event.which == SymPy.Keys.ESC){
-                    $(window).off("resize");
-                    this.closeFullscreen(ld);
-                    this.fullscreenMode = false;
+                    this.closeFullscreen();
                 }
             }, this));
         }
+        else {
+            this.closeFullscreen();
+        }
     },
 
-    closeFullscreen : function(ld) {
-        if(this.fullscreenMode){
-            var shell = $('#shell'),
-                leftdiv = $('#main');
-            $('#shell').css('padding', 0);
-            $('body').css('overflow', 'auto');
-            $('.right_title').css('padding-top', 0);
-            leftdiv.css({
-               position : 'static',
-               margin : '4px 0 4px 4px',
-               backgroundColor : 'white'
+    closeFullscreen : function() {
+        if(this.fullscreenMode) {
+            var main = $("#main");
+            main.removeClass('fullscreen');
+            main.find('#sidebar').show();
+            main.find('#footer').show();
+            $("#sympy-live-toolbar-main").appendTo("#shell");
+
+            $("#overlay").show().fadeOut(500, function() { this.remove(); });
+            $(document.body).css({
+                width: 'auto',
+                height: 'auto',
+                overflow: 'auto'
             });
-            leftdiv.animate({
-                top : ld.pos.top,
-                left : ld.pos.left,
-                width : ld.width,
-                height : this.leftHeight,
-                borderWidth : ld.border,
-                padding: 10
-            }, 100, function(){
-                leftdiv.css({height: 'auto'});
-            });
-            $('.sympy-live-output').css({
-                'width' : '95%',
-                'height' : '20em'
-            });
-            $("#sympy-live-toolbar-main").
-                appendTo("#shell");
+
+            $(window).off('resize');
+            $('.sympy-live-output').css('height', '');
         }
         this.fullscreenMode = false;
     },

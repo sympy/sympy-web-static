@@ -354,10 +354,6 @@ ul {
 
 /* Phones */
 @media screen and (max-device-width: 767px) {
-  body {
-    font-size: 1.5em !important;
-  }
-
   pre {
     overflow: auto;
   }
@@ -388,14 +384,14 @@ ul {
   }
 
   #header img {
-    height: 59px;
-    width: 75px;
+    height: 47px;
+    width: 60px;
   }
 
   #mobile-menu {
-    background: url(/static/images/mobile-menu.png) 5px 5px / 50px 50px no-repeat;
-    width: 59px;
-    height: 59px;
+    background: url(/static/images/mobile-menu.png) 5px 5px / 40px 40px no-repeat;
+    width: 47px;
+    height: 47px;
     display: inline-block;
     float: right;
   }
