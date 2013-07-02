@@ -111,6 +111,11 @@ SymPy.getBasePath = function(baseName) {
     return null;
 };
 
+SymPy.HISTORY_TEMPLATE = '<div id="sympy-live-toolbar-history">' +
+    '<button id="button-history-prev">↑</button>' +
+    '<button id="button-history-next">↓</button>' +
+    '</div>';
+
 SymPy.Shell = Class.$extend({
     banner: null,
     history: [''],
@@ -157,7 +162,8 @@ SymPy.Shell = Class.$extend({
             this.banner = SymPy.rstrip(this.banner) + '\n\n';
         }
 
-        this.isMobile = window.matchMedia("screen and (max-width: 767px)").matches;
+        this.isPhone = window.matchMedia("screen and (max-device-width: 767px)").matches;
+        this.isMobile = window.matchMedia("screen and (max-device-width: 1280px)").matches;
 
         var index;
 
@@ -286,7 +292,7 @@ SymPy.Shell = Class.$extend({
             this.focus();
         }, this));
 
-        if (!this.isMobile) {
+        if (!this.isPhone) {
             this.autocompleteEl.change($.proxy(function(event) {
                 this.updateSettings();
                 this.focus();
@@ -295,6 +301,29 @@ SymPy.Shell = Class.$extend({
             this.fullscreenEl.click($.proxy(function(event) {
                 this.fullscreen();
             }, this));
+        }
+        else {
+            this.promptEl.attr({autocorrect: 'off', autocapitalize: 'off'});
+            $("#sympy-live-toolbar-main").
+                appendTo(".sympy-live-completions-toolbar");
+            this.completeButtonEl = $("<button>Complete</button>").
+                insertAfter(this.evaluateEl);
+            this.historyPrevEl.click($.proxy(function(event){
+                this.promptEl.focus(1000);
+                this.prevInHistory();
+            }, this));
+            this.historyNextEl.click($.proxy(function(event){
+                this.promptEl.focus(1000);
+                this.nextInHistory();
+            }, this));
+            this.completeButtonEl.click($.proxy(function(event){
+                this.completer.complete(
+                    this.getStatement(),
+                    this.getSelection());
+            }, this));
+            $("#footer").appendTo($("#wrapper"));
+
+            this.completer.expandCompletions = true;
         }
 
         setInterval($.proxy(this.updatePrompt, this), 100);
@@ -345,7 +374,7 @@ SymPy.Shell = Class.$extend({
         index = this.recordTypes.indexOf(this.record);
         this.recordEl.children('option')[index].selected = true;
 
-        if (!this.isMobile) {
+        if (!this.isPhone) {
             this.toolbarEl.append([
                 $('<div/>').append([
                     $('<label for="autocomplete">Complete with</label>'),
@@ -362,6 +391,16 @@ SymPy.Shell = Class.$extend({
             index = this.autocompleteTypes.indexOf(this.autocomplete);
             this.autocompleteEl.children('option')[index].selected = true;
         }
+        else {
+            this.promptEl.after($(SymPy.HISTORY_TEMPLATE));
+            this.submitEl.children('option[value="enter"]').
+                html("submits");
+            this.submitEl.children('option[value="shift-enter"]').
+                html("inserts newline");
+            this.submitEl.prev().html('Enter');
+            this.historyPrevEl = $("#button-history-prev");
+            this.historyNextEl = $("#button-history-next");
+        }
     },
     renderButtons: function(el) {
         this.buttonsEl = $('<p/>').
@@ -373,7 +412,7 @@ SymPy.Shell = Class.$extend({
         this.clearEl = $('<button>Clear</button>').
             appendTo(this.buttonsEl);
 
-        if (!this.isMobile) {
+        if (!this.isPhone) {
             this.fullscreenEl = $('<button>Fullscreen</button>').
                 attr('id', 'fullscreen-button').
                 appendTo(this.buttonsEl);
@@ -482,14 +521,12 @@ SymPy.Shell = Class.$extend({
         if (this.historyCursor > 0) {
             this.setValue(this.history[--this.historyCursor]);
         }
-        this.focus();
     },
 
     nextInHistory: function() {
         if (this.historyCursor < this.history.length - 1) {
             this.setValue(this.history[++this.historyCursor]);
         }
-        this.focus();
     },
 
     handleKey: function(event) {
@@ -845,7 +882,6 @@ SymPy.Shell = Class.$extend({
         }
 
         this.setEvaluating(false);
-        this.focus();
     },
 
     error: function(xhr, status, error) {
@@ -866,7 +902,6 @@ SymPy.Shell = Class.$extend({
         this.clearValue();
         this.updatePrompt();
         this.setEvaluating(false);
-        this.focus();
     },
 
     clear: function() {
@@ -956,9 +991,9 @@ SymPy.Shell = Class.$extend({
                 var height = $("#shell").height() -
                     2 * $('.sympy-live-prompt').outerHeight() -
                     5 * $('.sympy-live-autocompletions-container').outerHeight();
-                if (height < 25 * 16) {
-                    // 25em * (16px / 1em), at least at 96dpi?
-                    height = 25 * 16;
+                if (height < 20 * 16) {
+                    // 20em * (16px / 1em), at least at 96dpi?
+                    height = 20 * 16;
                 }
                 $('.sympy-live-output').height(height);
             };
