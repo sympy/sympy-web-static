@@ -55,48 +55,6 @@ SymPy.MobileShell = SymPy.Shell.$extend({
         }
         this.$super(event);
     },
-    renderSearches: function(){
-        this.savedSearches = $("#saved-searches");
-        this.recentSearches = $("#recent-searches");
-        var setupEval = (function(el){
-            var nodes = el.find("button");
-            var shell = this;  // closure
-            el.find("button").each(function(index, node){
-                node = $(node);
-                node.click(function(event){
-                    // We don't want the query to show up twice
-                    var origPrivacy = shell.recordEl.val();
-                    shell.recordEl.val("on");
-                    // And we're going to scroll to the output
-                    var scrollY = shell.outputEl.offset().top;
-
-                    shell.setValue(node.children("pre").html());
-                    shell.evaluate();
-
-                    $(document.body).scrollTop(scrollY);
-                    shell.recordEl.val(origPrivacy);
-                });
-            });
-        });
-        setupEval.call(this, this.recentSearches);
-        setupEval.call(this, this.savedSearches);
-        $("#saved-searches-clear").click(function(){
-            if(confirm("Delete history?") === true){
-                $.ajax({
-                    url: "http://" + window.location.host + "/delete",
-                    type: 'GET',
-                    dataType: 'text',
-                    success: function(data, status, xhr){
-                        $('#saved-searches-list').
-                            html('<li>' + data + '</li>');
-                    },
-                    failure: function(xhr, status, error){
-                        alert("Error: " + status + error);
-                    }
-                })
-            }
-        });
-    },
 
     focus: function() {
         this.setSelection(this.getValue().length);

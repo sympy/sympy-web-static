@@ -186,6 +186,33 @@ button:hover {
   width: 30%;
 }
 
+/* Sidebar card-specific styling */
+
+#user .content {
+  padding: 0;
+}
+
+#saved_searches, #recent_searches {
+  max-height: 10em;
+  overflow-y: auto;
+}
+
+#saved_searches a, #recent_searches a {
+  display: block;
+  width: 100%;
+  margin: 0.1em 0;
+  font-size: 1.25em;
+  line-height: 1.25em;
+  background-color: #EEE;
+}
+
+#saved_searches a pre, #recent_searches a pre {
+  margin: 0 0.5em;
+  overflow: hidden;
+}
+
+/* Fullscreen styling */
+
 #main h1 {
   display: none;
 }
@@ -265,6 +292,10 @@ button:hover {
   .sympy-live-output, .sympy-live-caret, .sympy-live-prompt {
     font-size: 1em;
     padding: 0;
+  }
+
+  .sympy-live-output {
+    height: 15em;
   }
 
   .sympy-live-caret {

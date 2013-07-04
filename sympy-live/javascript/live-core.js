@@ -327,6 +327,8 @@ SymPy.Shell = Class.$extend({
         }
 
         setInterval($.proxy(this.updatePrompt, this), 100);
+
+        this.renderSearches();
     },
 
     renderToolbar: function(settings) {
@@ -402,6 +404,7 @@ SymPy.Shell = Class.$extend({
             this.historyNextEl = $("#button-history-next");
         }
     },
+
     renderButtons: function(el) {
         this.buttonsEl = $('<p/>').
             addClass('sympy-live-toolbar').
@@ -422,6 +425,33 @@ SymPy.Shell = Class.$extend({
             attr('id', 'make-one-off-button').
             appendTo(this.buttonsEl).
             attr('title', 'Make a URL that evaluates the session history');
+    },
+
+    renderSearches: function(){
+        this.savedSearches = $("#saved_searches");
+        this.recentSearches = $("#recent_searches");
+        var setupEval = (function(el){
+            var nodes = el.find("button");
+            var shell = this;  // closure
+            el.find("a").each(function(index, node){
+                node = $(node);
+                node.click(function(event){
+                    // We don't want the query to show up twice
+                    var origPrivacy = shell.recordEl.val();
+                    shell.recordEl.val("on");
+                    // And we're going to scroll to the output
+                    var scrollY = shell.outputEl.offset().top;
+
+                    shell.setValue(node.children("pre").html());
+                    shell.evaluate();
+
+                    $(document.body).scrollTop(scrollY);
+                    shell.recordEl.val(origPrivacy);
+                });
+            });
+        });
+        setupEval.call(this, this.recentSearches);
+        setupEval.call(this, this.savedSearches);
     },
 
     getKeyEvent: function() {
@@ -921,8 +951,10 @@ SymPy.Shell = Class.$extend({
         this.setCookie('sympy-printer', this.printerEl.val());
         this.setCookie('sympy-submit', this.submitEl.val());
         this.setCookie('sympy-privacy', this.recordEl.val());
-        this.setCookie('sympy-autocomplete', this.autocompleteEl.val());
-	    this.setCookie('desktop', this.forcedesktopEl.prop('checked'));
+
+        if (!this.isMobile) {
+            this.setCookie('sympy-autocomplete', this.autocompleteEl.val());
+        }
     },
 
     setCookie: function(name, value) {
@@ -990,7 +1022,8 @@ SymPy.Shell = Class.$extend({
             var resize = function() {
                 var height = $("#shell").height() -
                     2 * $('.sympy-live-prompt').outerHeight() -
-                    5 * $('.sympy-live-autocompletions-container').outerHeight();
+                    5 * $('.sympy-live-autocompletions-container').outerHeight() -
+                    $("#main h1").outerHeight();
                 if (height < 20 * 16) {
                     // 20em * (16px / 1em), at least at 96dpi?
                     height = 20 * 16;
