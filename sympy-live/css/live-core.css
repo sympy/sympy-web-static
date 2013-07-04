@@ -60,24 +60,6 @@
     margin-bottom: 0.5em;
 }
 
-button {
-  font-family: 'Open Sans', sans-serif;
-  border: 1px solid #552634;
-  color: #FFF;
-  padding: 0.25em;
-  margin: 0;
-  background-color: #552634;
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#40252D, endColorstr=#370C19);
-  -moz-transition: all .5s ease-out;
-  -webkit-transition: all .5s ease-out;
-  -o-transition: all .5s ease-out;
-  transition: all .5s ease-out;
-}
-
-button:hover {
-  background: #370C19;
-}
-
 .sympy-live-toolbar > button {
   margin-right: 0.5em;
   padding: 0.4em;

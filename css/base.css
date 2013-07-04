@@ -165,16 +165,10 @@ a img { border: none; }
 
 #search-gamma button {
   font-family: inherit;
-  border: 0;
   display: block;
-  background: #333;
-  color: #FFF;
-  border-radius: 0 0 5px 5px;
   font-weight: 300;
-  border: 1px solid #777;
   margin: auto;
   padding: 0.25em 0.5em;
-  font-size: 1em;
 }
 
 #search-gamma button:hover {
@@ -349,6 +343,25 @@ ul {
   padding: 0px 25px;
 }
 
+/* Buttons */
+
+button {
+  font-family: 'Open Sans', sans-serif;
+  border: 1px solid #552634;
+  color: #FFF;
+  padding: 0.25em;
+  margin: 0;
+  background-color: #552634;
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#40252D, endColorstr=#370C19);
+  -moz-transition: all .5s ease-out;
+  -webkit-transition: all .5s ease-out;
+  -o-transition: all .5s ease-out;
+  transition: all .5s ease-out;
+}
+
+button:hover {
+  background: #370C19;
+}
 
 /* Responsive design */
 
