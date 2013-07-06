@@ -148,15 +148,12 @@ a img { border: none; }
   padding-bottom: 20px;
 }
 
-#search-gamma {
-}
-
 #search-gamma input[type='text'] {
   width: 90%;
   display: block;
   margin: auto;
-  border: 1px solid #3B5526;
-  border-radius: 5px;
+  border: 1px solid #000;
+  border-radius: 7px;
   padding: 0.25em 0.5em;
   height: 1.25em;
   line-height: 1.25em;
@@ -166,15 +163,9 @@ a img { border: none; }
 #search-gamma button {
   font-family: inherit;
   display: block;
-  font-weight: 300;
   margin: auto;
   padding: 0.25em 0.5em;
-}
-
-#search-gamma button:hover {
-  -webkit-box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
+  border-radius: 0 0 7px 7px;
 }
 
 /* tables */
@@ -352,15 +343,17 @@ button {
   padding: 0.25em;
   margin: 0;
   background-color: #552634;
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#40252D, endColorstr=#370C19);
-  -moz-transition: all .5s ease-out;
-  -webkit-transition: all .5s ease-out;
-  -o-transition: all .5s ease-out;
-  transition: all .5s ease-out;
+  -moz-transition: all .3s ease-in;
+  -webkit-transition: all .3s ease-in;
+  -o-transition: all .3s ease-in;
+  transition: all .3s ease-in;
 }
 
 button:hover {
   background: #370C19;
+  -webkit-box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
 
 /* Responsive design */

@@ -50,11 +50,6 @@ hr {
 #main .block .content h2 {
   margin-left: 15px;
 }
-
-#main .content {
-  -webkit-box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
-}
   
 #main-navigation {
   background: #3B5526;
@@ -269,13 +264,17 @@ ul.list li .item .avatar {
   margin-right:10px;
 }
 
+#main .content, .sidebar_card {
+  -webkit-box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 7px;
+  background: #FFF;
+}
+
 .sidebar_card {
   padding: 0.5em;
   overflow: hidden;
-  background: #FFF;
   margin: 0 0 30px;
-  -webkit-box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar_card p, .sidebar_card h3 {
