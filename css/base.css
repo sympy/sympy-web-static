@@ -334,6 +334,10 @@ ul {
   padding: 0px 25px;
 }
 
+#mobile-menu {
+  display: none;
+}
+
 /* Buttons */
 
 button {
@@ -395,7 +399,6 @@ button:hover {
   }
 
   #mobile-menu {
-    background: url(/static/images/mobile-menu.png) 5px 5px / 40px 40px no-repeat;
     width: 47px;
     height: 47px;
     display: inline-block;
@@ -404,6 +407,15 @@ button:hover {
     margin: 0;
     padding: 0;
     z-index: 1000;
+    color: #FFF;
+    font-size: 35px;
+  }
+
+  #mobile-menu i {
+    display: block;
+    text-align: center;
+    line-height: 47px;
+    height: 100%;
   }
 
   #mobile-menu:active {
@@ -470,8 +482,13 @@ button:hover {
   }
 
   #mobile-menu {
-    background-size: 30px 30px;
     width: 39px;
     height: 39px;
+    color: #FFF;
+    font-size: 28px;
+  }
+
+  #mobile-menu i {
+    line-height: 39px;
   }
 }
