@@ -33,7 +33,7 @@ a img { border: none; }
 
 #header img {
   vertical-align: middle;
-  height: 78px;
+  height: 67px;
   width: 100px;
 }
 
@@ -394,13 +394,14 @@ button:hover {
   }
 
   #header img {
-    height: 47px;
-    width: 60px;
+    height: 45px;
+    width: 67px;
+    margin: 0;
   }
 
   #mobile-menu {
-    width: 47px;
-    height: 47px;
+    width: 45px;
+    height: 45px;
     display: inline-block;
     float: right;
     border: 0;
@@ -414,7 +415,7 @@ button:hover {
   #mobile-menu i {
     display: block;
     text-align: center;
-    line-height: 47px;
+    line-height: 45px;
     height: 100%;
   }
 
@@ -477,18 +478,18 @@ button:hover {
   }
 
   #header img {
-    height: 39px;
+    height: 34px;
     width: 50px;
   }
 
   #mobile-menu {
-    width: 39px;
-    height: 39px;
+    width: 34px;
+    height: 34px;
     color: #FFF;
     font-size: 28px;
   }
 
   #mobile-menu i {
-    line-height: 39px;
+    line-height: 34px;
   }
 }
