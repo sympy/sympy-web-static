@@ -127,6 +127,10 @@ hr {
   padding: 5px;
 }
 
+#footer a:link, #footer a:visited, #footer a:hover, #footer a:active {
+  color: #81B953;
+}
+
 /* tables */
 
 
