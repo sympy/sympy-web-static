@@ -35,6 +35,7 @@ a img { border: none; }
   vertical-align: middle;
   height: 67px;
   width: 100px;
+  margin: 10px 0;
 }
 
 #main {
@@ -101,6 +102,8 @@ a img { border: none; }
 
 #main-navigation {
   width: 100%;
+  padding: 0.25em;
+  border-radius: 7px;
 }
 
 #user-navigation ul, #main-navigation ul, .secondary-navigation ul, #sidebar ul.navigation {
@@ -364,6 +367,15 @@ button:hover {
 
 /* Phones */
 @media screen and (max-device-width: 767px) {
+  #header {
+    background: #3B5526;
+    border-bottom: 3px solid #81B953;
+  }
+
+  #header h1 {
+    font-weight: normal !important;
+  }
+  
   pre {
     overflow: auto;
   }
@@ -391,6 +403,11 @@ button:hover {
     display: inline-block;
     width: auto;
     float: left;
+  }
+
+  #header h1 a:link, #header h1 a:active, 
+  #header h1 a:hover, #header h1 a:visited {
+    color: #FFF !important;
   }
 
   #header img {
@@ -425,6 +442,8 @@ button:hover {
 
   #main-navigation {
     clear: both;
+    padding: 0;
+    border-radius: 0;
   }
 
   #main-navigation ul {
@@ -440,6 +459,10 @@ button:hover {
     float: none !important;
     padding: 0.25em 0;
     margin-right: 0 !important;
+  }
+
+  #main-navigation a {
+    border-radius: 0 !important;
   }
 
   #main {
