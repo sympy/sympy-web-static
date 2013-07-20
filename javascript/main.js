@@ -6,16 +6,17 @@ $(document).ready(function() {
 
         $('#mobile-menu').click(function() {
             if (visible) {
-                el.height(0).css('opacity', 0);
-                window.setTimeout(function() {
-                    el.hide();
-                    visible = false;
-                }, 290);
+                el.css('opacity', 0);
+                visible = false;
+                // window.setTimeout(function() {
+                //     el.hide();
+                //     visible = false;
+                // }, 290);
             }
             else {
-                var height = el.show().css('height', 'auto').height();
-                el.hide();
-                el.show().height(height).css('opacity', 1);
+                // var height = el.show().css('height', 'auto').height();
+                // el.hide();
+                el.show().css('opacity', 1);
                 visible = true;
             }
         });
