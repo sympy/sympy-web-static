@@ -49,12 +49,12 @@ SymPy.Completer = Class.$extend({
     setup: function() {
         this.toolbarEl = this.containerEl.append(
             $("<div />", {"class": 'sympy-live-completions-toolbar'})
-                .append($("<button><span>&#x25BC;</span></button>")
+                .append($('<button><i class="icon-caret-down"></i></button>')
                         .attr({"id": 'sympy-live-completions-toggle'}))
-                .append($("<button>&lt;</button>")
+                .append($('<button><i class="icon-angle-left"></i></button>')
                         .attr({"class": 'disabled',
                                'id': 'sympy-live-completions-prev'}))
-                .append($("<button>&gt;</button>")
+                .append($('<button><i class="icon-angle-right"></i></button>')
                         .attr({"class": 'disabled',
                                "id": 'sympy-live-completions-next'}))
         ).children('div');

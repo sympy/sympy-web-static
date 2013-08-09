@@ -1076,9 +1076,17 @@ SymPy.Shell = Class.$extend({
         var dialog = $('<div/>')
             .appendTo($('body'))
             .addClass('sympy-live-dialog');
-        var output = $('<div><p>click outside to close</p></div>');
+        var output = $('<div/>');
         dialog.append(output);
         dialog.fadeIn(250);
+
+        var close = function() {
+            dialog.fadeOut(500);
+        };
+
+        output.append($('<button><i class="icon-collapse-top"></i> Close</button>').click(function() {
+            close();
+        }));
 
         output.append($('<p> This is your history. The #-- comments separate individual statements to be executed and will be removed from the output.</p>'));
         var history = $('<textarea/>');
@@ -1086,29 +1094,17 @@ SymPy.Shell = Class.$extend({
         history.val(contents);
         output.append(history);
 
-        var close = function() {
-            dialog.fadeOut(500);
-        };
-
-        output.append($('<button>Make URL</button>').click(function() {
+        output.append($('<button><i class="icon-ok"></i> Make URL</button>').click(function() {
             close();
             window.open(url + encodeURIComponent(history.val()));
         }));
 
-        output.click(function(e) {
-            e.stopPropagation();
-        });
         dialog.click(close);
         $('body').keydown(function(e) {
             if (e.which == SymPy.Keys.ESC) {
                 close();
             }
         });
-        setTimeout(function() {
-            $('body').click(function() {
-                close();
-            });
-        }, 500);
     },
 
     evaluateInitial: function(statements) {
