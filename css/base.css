@@ -169,20 +169,8 @@ header img {
 #search-gamma button {
   margin: 0 auto;
   display: block;
-  font-family: inherit;
-  background: #370C19;
-  border: 0;
-  color: #FFF;
-  padding: 0.5em 0.75em;
-  -moz-transition: all .3s ease-in;
-  -webkit-transition: all .3s ease-in;
-  -o-transition: all .3s ease-in;
-  transition: all .3s ease-in;
   border-radius: 0 0 3px 3px;
-}
-
-#search-gamma button:hover {
-  background: #552634;
+  padding: 0.5em 0.75em;
 }
 
 footer {
@@ -341,4 +329,68 @@ a:visited, a:active {
 
 a:hover {
   text-decoration: underline;
+}
+
+pre {
+  white-space: pre;
+  font-family: monospace;
+  overflow-x: auto;
+  font-size: 1em;
+  margin: 0.5em 0;
+}
+
+/* Form elements */
+
+button {
+  font-family: inherit;
+  background: #370C19;
+  border: 0;
+  color: #FFF;
+  -moz-transition: all .3s ease-in;
+  -webkit-transition: all .3s ease-in;
+  -o-transition: all .3s ease-in;
+  transition: all .3s ease-in;
+  margin: 0;
+  cursor: pointer;
+}
+
+button.disabled {
+  cursor: default;
+}
+
+button:hover {
+  background: #552634;
+}
+
+textarea {
+  border: 1px solid #CCC;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  border: 0;
+}
+
+body::-webkit-scrollbar-track {
+  background: #EEE;
+}
+
+body::-webkit-scrollbar-track:hover {
+  border: 1px solid #FFF;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CCC;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #777;
 }

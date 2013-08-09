@@ -8,14 +8,8 @@ $(document).ready(function() {
             if (visible) {
                 el.css('opacity', 0);
                 visible = false;
-                // window.setTimeout(function() {
-                //     el.hide();
-                //     visible = false;
-                // }, 290);
             }
             else {
-                // var height = el.show().css('height', 'auto').height();
-                // el.hide();
                 el.show().css('opacity', 1);
                 visible = true;
             }
