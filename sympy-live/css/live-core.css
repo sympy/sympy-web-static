@@ -21,7 +21,7 @@
 .sympy-live-caret {
     font-family: monospace;
     font-size: 1em;
-    width: 5%;
+    width: 8%;
     border: 0;
     border-top: 1px solid silver;
     margin: 0;
@@ -37,7 +37,7 @@
 .sympy-live-prompt {
     font-family: monospace;
     font-size: 1em;
-    width: 94%;
+    width: 91%;
     border: 0;
     border-top: 1px solid silver;
     margin: 0;
@@ -101,6 +101,11 @@
   bottom: 0;
   background-color: rgba(1,1,1,0.8);
   z-index: 10001;
+  -webkit-transition: all 300ms ease-in;
+  -moz-transition: all 300ms ease-in;
+  -ms-transition: all 300ms ease-in;
+  -o-transition: all 300ms ease-in;
+  transition: all 300ms ease-in;
 }
 
 .sympy-live-dialog div {
@@ -142,7 +147,7 @@
 
 #settings label {
   display: inline-block;
-  width: 35%;
+  width: 40%;
 }
 
 #settings select {
@@ -326,7 +331,7 @@
   }
 
   .sympy-live-dialog div textarea {
-    height: 70%;
+    height: 40%;
   }
 }
 

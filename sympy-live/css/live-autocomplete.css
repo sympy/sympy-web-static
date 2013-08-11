@@ -79,7 +79,7 @@
     -moz-transform: rotate(0deg) translate(0px, 0px);
     -o-transform: rotate(0deg) translate(0px, 0px);
     -ms-transform: rotate(0deg) translate(0px, 0px);
-    -transform: rotate(0deg) translate(0px, 0px);
+    transform: rotate(0deg) translate(0px, 0px);
 }
 
 .sympy-live-completions-toolbar button.hidden:first-child span {
@@ -87,14 +87,13 @@
     -moz-transform: rotate(-180deg) translate(0px, 0px);
     -o-transform: rotate(-180deg) translate(0px, 0px);
     -ms-transform: rotate(-180deg) translate(0px, 0px);
-    -transform: rotate(-180deg) translate(0px, 0px);
+    transform: rotate(-180deg) translate(0px, 0px);
 }
 
 @media screen and (max-width: 767px) {
   .sympy-live-completions {
     padding: 0em 0.25em;
     height: 2em;
-    vertical-align: center;
     font-size: 12pt;
     width: 82%;
   }

@@ -1080,10 +1080,11 @@ SymPy.Shell = Class.$extend({
             .addClass('sympy-live-dialog');
         var output = $('<div/>');
         dialog.append(output);
-        dialog.fadeIn(250);
+        dialog.css('opacity', 0);
 
         var close = function() {
-            dialog.fadeOut(500);
+            dialog.css('opacity', 0);
+            setTimeout(function() { dialog.remove() }, 300);
         };
 
         output.append($('<button><i class="icon-collapse-top"></i> Close</button>').click(function() {
@@ -1106,7 +1107,11 @@ SymPy.Shell = Class.$extend({
             if (e.which == SymPy.Keys.ESC) {
                 close();
             }
-        });
+        }).scrollTop(0);
+
+        // show the dialog
+        // we're using CSS to animate
+        setTimeout(function() { dialog.css('opacity', 1); }, 100);
     },
 
     evaluateInitial: function(statements) {
