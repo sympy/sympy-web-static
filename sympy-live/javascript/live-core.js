@@ -343,7 +343,7 @@ SymPy.Shell = Class.$extend({
         this.toolbarEl = $('<p/>').
             addClass('sympy-live-toolbar').
             append(
-                $('<div/>').append([
+                $('<div/>').append(
                     $('<label for="output-format">Output Format</label>'),
                     $('<select id="output-format"/>').append(
                         $('<option value="repr">Repr</option>'),
@@ -352,21 +352,21 @@ SymPy.Shell = Class.$extend({
                         $('<option value="unicode">Unicode</option>'),
                         $('<option value="latex">LaTeX</option>')
                     )
-                ]),
-                $('<div/>').append([
+                ),
+                $('<div/>').append(
                     $('<label for="submit-behavior">Submit with</label>'),
                     $('<select id="submit-behavior"/>').append(
                         $('<option value="enter">Enter</option>'),
                         $('<option value="shift-enter">Shift-Enter</option>')
                     )
-                ]),
-                $('<div/>').append([
+                ),
+                $('<div/>').append(
                     $('<label for="privacy">Privacy</label>'),
                     $('<select id="privacy"/>').append(
                         $('<option value="on">On</option>'),
                         $('<option value="off">Off</option>')
                     )
-                ])
+                )
             );
         this.toolbarEl.appendTo(settings);
         this.supportsSelection = 'selectionStart' in this.promptEl.get(0);
@@ -385,18 +385,18 @@ SymPy.Shell = Class.$extend({
         this.recordEl.children('option')[index].selected = true;
 
         if (!this.isPhone) {
-            this.toolbarEl.append([
-                $('<div/>').append([
+            this.toolbarEl.append(
+                $('<div/>').append(
                     $('<label for="autocomplete">Complete with</label>'),
                     $('<select id="autocomplete"/>').append(
                         $('<option value="tab">Tab</option>'),
                         $('<option value="ctrl-space">Ctrl-Space</option>')
                     )
-                ]),
-                $('<div/>').append([
+                ),
+                $('<div/>').append(
                     $('<span>Ctrl-Up/Down for history</span>')
-                ])
-            ]);
+                )
+            );
             this.autocompleteEl = this.toolbarEl.find('select:nth(3)');
             index = this.autocompleteTypes.indexOf(this.autocomplete);
             this.autocompleteEl.children('option')[index].selected = true;
@@ -1129,7 +1129,11 @@ SymPy.Shell = Class.$extend({
             if (e.which == SymPy.Keys.ESC) {
                 close();
             }
-        }).scrollTop(0);
+        });
+
+        if (this.isMobile) {
+            $('body').scrollTop(0);
+        }
 
         // show the dialog
         // we're using CSS to animate
