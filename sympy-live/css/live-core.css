@@ -192,6 +192,10 @@
   overflow: hidden;
 }
 
+.executable {
+  cursor: pointer;
+}
+
 /* Fullscreen styling */
 
 #main h1 {

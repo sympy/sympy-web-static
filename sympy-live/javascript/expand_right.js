@@ -13,11 +13,25 @@ function makeTransition(elemId) {
     });
 }
 
+function makeExecutable(index, elem) {
+    elem = $(elem);
+    elem.attr('title', 'Click to execute in shell');
+    elem.click(function() {
+        $.each(utilities.extractStatements(elem), function(i, statement) {
+            SymPy.SHELL_INSTANCE.queueStatement(statement);
+        });
+        SymPy.SHELL_INSTANCE.dequeueStatement();
+        SymPy.SHELL_INSTANCE.evaluate();
+    });
+}
+
 $(document).ready(function(){
     $('.clickable_top').each(function(i, elem){
         var elem_id = $(elem).parents('div').first().attr('id');
         $(elem).click(makeTransition('#' + elem_id));
     });
+
+    $('.executable').each(makeExecutable);
 
     setTimeout(function() {
         if (window.location.hash) {

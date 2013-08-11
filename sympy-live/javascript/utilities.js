@@ -31,7 +31,47 @@ var utilities = {
         return root;
     },
 
-    getURLParameter: function (name) {
+    getURLParameter: function(name) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+    },
+
+    /**
+     * Processes an element, looking for Python statements formatted as
+     * console input. This differs from SphinxShell's functionality in that
+     * it does not handle Pygments highlighting.
+     *
+     * @return {Array} list of statements
+     */
+    extractStatements: function(codeEl) {
+        codeEl = codeEl.get(0);
+
+        // innerText is non-standard but only Firefox does not
+        // support it; textContent is standard but IE < 9
+        // does not support it
+        var text = codeEl.textContent || codeEl.innerText;
+        var statements = [];
+        var statement = [];
+        var lines = text.split('\n');
+
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+
+            if (line.substring(0, 4) === "... ") {
+                statement.push(line.substring(4));
+                continue;
+            }
+            else if (line.substring(0, 4) === ">>> ") {
+                statement.push(line.substring(4));
+            }
+
+            if (statement.length) {
+                statements.push(statement.join('\n'));
+                statement = [];
+            }
+        }
+        if (statement.length) {
+            statements.push(statement.concat('\n'));
+        }
+        return statements;
     }
 }
