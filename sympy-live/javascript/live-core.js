@@ -116,6 +116,8 @@ SymPy.HISTORY_TEMPLATE = '<div id="sympy-live-toolbar-history">' +
     '<button id="button-history-next">↓</button>' +
     '</div>';
 
+SymPy.SHELL_INSTANCE = null;
+
 SymPy.Shell = Class.$extend({
     banner: null,
     history: [''],
@@ -162,6 +164,8 @@ SymPy.Shell = Class.$extend({
             this.banner = SymPy.rstrip(this.banner) + '\n\n';
         }
 
+        this.queuedStatements = [];
+
         this.isPhone = window.matchMedia("screen and (max-device-width: 767px)").matches;
         this.isMobile = window.matchMedia("screen and (max-device-width: 1280px)").matches;
 
@@ -187,6 +191,8 @@ SymPy.Shell = Class.$extend({
             this.tabWidth = config.tabWidth;
             delete config.tabWidth;
         }
+
+        SymPy.SHELL_INSTANCE = this;
     },
 
     render: function(el) {
@@ -888,6 +894,16 @@ SymPy.Shell = Class.$extend({
         }
     },
 
+    queueStatement: function(statement) {
+        this.queuedStatements.push(statement);
+    },
+
+    dequeueStatement: function() {
+        if (this.queuedStatements.length !== 0) {
+            this.setValue(this.queuedStatements.shift());
+        }
+    },
+
     done: function(response) {
         this.session = response.session;
 
@@ -914,6 +930,11 @@ SymPy.Shell = Class.$extend({
         }
 
         this.setEvaluating(false);
+
+        if (this.queuedStatements.length !== 0) {
+            this.dequeueStatement();
+            this.evaluate();
+        }
     },
 
     error: function(xhr, status, error) {
@@ -934,6 +955,7 @@ SymPy.Shell = Class.$extend({
         this.clearValue();
         this.updatePrompt();
         this.setEvaluating(false);
+        this.queuedStatements = [];
     },
 
     clear: function() {

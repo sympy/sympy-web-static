@@ -7,7 +7,6 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     __init__: function(config) {
         this.$super(config);
         this.visible = false;
-        this.queuedStatements = [];
 
         index = this.evalModeTypes.indexOf(config.record);
         this.evalMode = (index == -1) ? this.getCookie('sympy-evalMode', 'eval') : config.evalMode;
@@ -43,7 +42,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         // Change Fullscreen to go to main website
         $("#fullscreen-button").html("Go to SymPy Live");
 
-	    this.evalModeEl.change($.proxy(function(event) {
+        this.evalModeEl.change($.proxy(function(event) {
             this.updateSettings();
             this.focus();
         }, this));
@@ -80,25 +79,6 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
 
         // Make enter the default submission button
         $("#submit-behavior").val("enter");
-    },
-
-    done: function(response) {
-        this.$super(response);
-        if (this.queuedStatements.length !== 0) {
-            this.dequeueStatement();
-            this.evaluate();
-        }
-    },
-
-    error: function(xhr, status, error) {
-        this.$super(xhr, status, error);
-        this.queuedStatements.length = 0;
-    },
-
-    dequeueStatement: function() {
-        if (this.queuedStatements.length !== 0) {
-            this.setValue(this.queuedStatements.shift());
-        }
     },
 
     processCodeBlocks: function() {
