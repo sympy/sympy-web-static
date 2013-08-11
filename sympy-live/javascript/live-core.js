@@ -17,7 +17,7 @@
 // old jQuery. Remove if using Sphinx >= 1.2
 if (!jQuery.isNumeric) {
     jQuery.isNumeric = function( obj ) {
-	    return !isNaN( parseFloat(obj) ) && isFinite( obj );
+        return !isNaN( parseFloat(obj) ) && isFinite( obj );
     };
 }
 if (!jQuery.fn.on) {
@@ -211,7 +211,9 @@ SymPy.Shell = Class.$extend({
             addClass('sympy-live-prompt').
             attr({
                 rows: '4',
-                spellcheck: 'false'
+                spellcheck: 'false',
+                autocorrect: 'off',
+                autocapitalize: 'off'
             }).
             appendTo(el);
 
@@ -226,8 +228,8 @@ SymPy.Shell = Class.$extend({
         }, this);
         this.completer.setup();
 
-	    this.renderButtons(el);
-	    var settings = $('#settings .content');
+        this.renderButtons(el);
+        var settings = $('#settings .content');
         this.renderToolbar(settings);
 
         this.caretEl.on("focus", function(event) {
@@ -864,17 +866,17 @@ SymPy.Shell = Class.$extend({
 
             this.scrollToDefault();
 
-			if (navigator.userAgent.match(/like Mac OS X/i)) {
+            if (navigator.userAgent.match(/like Mac OS X/i)) {
                 timeout = 58; // On an iOS Device
-			} else {
-				timeout = 61; // Not iOS based
-			}
+                } else {
+            timeout = 61; // Not iOS based
+                }
 
             $.ajax({
                 type: 'POST',
                 url: (this.basePath || '') + '/evaluate',
                 dataType: 'json',
-				timeout: (timeout * 1000),
+                timeout: (timeout * 1000),
                 data: JSON.stringify(data),
                 success: $.proxy(function(response, status) {
                     this.done(response);
@@ -928,7 +930,7 @@ SymPy.Shell = Class.$extend({
 
         $('<div/>').html(errorMessage).appendTo(this.outputEl);
 
-		this.scrollToDefault();
+        this.scrollToDefault();
         this.clearValue();
         this.updatePrompt();
         this.setEvaluating(false);
@@ -1122,7 +1124,7 @@ SymPy.Shell = Class.$extend({
         this.evaluate();
     },
 
-    focus: function(){
+    focus: function() {
         this.promptEl.focus();
     }
 });

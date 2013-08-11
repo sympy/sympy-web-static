@@ -90,7 +90,7 @@
     -transform: rotate(-180deg) translate(0px, 0px);
 }
 
-@media screen and (max-device-width: 767px) {
+@media screen and (max-width: 767px) {
   .sympy-live-completions {
     padding: 0em 0.25em;
     height: 2em;
@@ -150,28 +150,34 @@
   #sympy-live-completions-prev, #sympy-live-completions-next, #sympy-live-completions-toggle {
     display: none;
   }
+}
 
-  @media only screen and (max-width: 320px){
-    .sympy-live-completions {
-      width: 67%;
-    }
-    .sympy-live-completions-toolbar {
-      width: 30%;
-    }
-    .sympy-live-completions li, .sympy-live-completions.expanded li {
-      width: 70%;
-    }
+@media only screen and (max-width: 767px) {
+  .sympy-live-completions {
+    width: 67%;
   }
+  .sympy-live-completions-toolbar {
+    width: 30%;
+  }
+  .sympy-live-completions li, .sympy-live-completions.expanded li {
+    width: 90%;
+  }
+}
 
-  @media only screen and (min-width: 321px){
-    .sympy-live-completions {
-      width: 77%;
-    }
-    .sympy-live-completions-toolbar {
-      width: 20%;
-    }
-    .sympy-live-completions li, .sympy-live-completions.expanded li {
-      width: 40%;
-    }
+@media only screen and (max-width: 767px) and (orientation: landscape) {
+  .sympy-live-completions li, .sympy-live-completions.expanded li {
+    width: 45%;
+  }
+}
+
+@media only screen and (min-width: 768px){
+  .sympy-live-completions {
+    width: 77%;
+  }
+  .sympy-live-completions-toolbar {
+    width: 20%;
+  }
+  .sympy-live-completions li, .sympy-live-completions.expanded li {
+    width: 40%;
   }
 }
