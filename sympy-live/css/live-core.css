@@ -198,7 +198,7 @@
   display: none;
 }
 
-#main.fullscreen {
+.fullscreen {
   position: fixed;
   left: 0;
   top: 0;
@@ -207,20 +207,29 @@
   width: 100%;
   z-index: 1000;
   min-width: 960px;
+  background: #EEE;
 }
 
-#main.fullscreen .sympy-live-output {
+.fullscreen #content {
+  width: 100% !important;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  height: 100%;
+}
+
+.fullscreen .sympy-live-output {
   width: 100%;
 }
 
-#main.fullscreen .sympy-live-caret {
-  width: 2.5em;
+.fullscreen .sympy-live-caret {
+  width: 5em;
 }
 
-#main.fullscreen .sympy-live-prompt {
+.fullscreen .sympy-live-prompt {
   position: absolute;
-  left: 2.5em;
-  right: 0.1em;
+  left: 5em;
+  right: 1.25em;
   width: auto;
 }
 
@@ -232,7 +241,7 @@
   display: block;
 }
 
-#main.fullscreen .content, #main.fullscreen .block {
+.fullscreen .content, .fullscreen .block {
   margin: 0;
   width: 100%;
   max-width: 100%;
@@ -240,11 +249,11 @@
   background: #DDD;
 }
 
-#main.fullscreen #shell {
+.fullscreen #shell {
   height: 100%;
 }
 
-#main.fullscreen #make-one-off-button {
+.fullscreen #make-one-off-button {
   width: 100%;
   background-size: 32px 32px;
   background-position: 50% 0;
