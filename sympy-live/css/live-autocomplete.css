@@ -56,11 +56,16 @@
 .sympy-live-completions-toolbar button {
     width: 32%;
     height: 100%;
+    border-right: 1px solid #FFF;
 }
 
 .sympy-live-completions-toolbar button.disabled {
     background-color: #999;
     color: #000;
+}
+
+.sympy-live-completions-toolbar button:last-child {
+    border: 0;
 }
 
 .sympy-live-completions-toolbar .sympy-live-toolbar button {
@@ -69,12 +74,13 @@
     margin: 5px 0;
 }
 
-.sympy-live-completions-toolbar button:first-child span {
-    display: block;
-    -moz-transition: all 1s ease-in;
-    -webkit-transition: all 1s ease-in;
-    -o-transition: all 1s ease-in;
-    transition: all 1s ease-in;
+.sympy-live-completions-toolbar button:first-child i {
+    display: inline-block;
+    text-align: center;
+    -moz-transition: all 300ms ease-in;
+    -webkit-transition: all 300ms ease-in;
+    -o-transition: all 300ms ease-in;
+    transition: all 300ms ease-in;
     -webkit-transform: rotate(0deg) translate(0px, 0px);
     -moz-transform: rotate(0deg) translate(0px, 0px);
     -o-transform: rotate(0deg) translate(0px, 0px);
@@ -82,7 +88,7 @@
     transform: rotate(0deg) translate(0px, 0px);
 }
 
-.sympy-live-completions-toolbar button.hidden:first-child span {
+.sympy-live-completions-toolbar button.hidden:first-child i {
     -webkit-transform: rotate(-180deg) translate(0px, 0px);
     -moz-transform: rotate(-180deg) translate(0px, 0px);
     -o-transform: rotate(-180deg) translate(0px, 0px);
