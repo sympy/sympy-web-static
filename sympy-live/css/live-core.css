@@ -55,15 +55,16 @@
 
 .sympy-live-toolbar {
     margin: 5px 0 0 0;
+    height: 2em;
 }
 
 .sympy-live-toolbar > * {
-    margin-bottom: 0.5em;
+  height: 100% !important;
 }
 
 .sympy-live-toolbar > button {
   margin-right: 0.5em;
-  padding: 0.4em;
+  padding: 0.5em;
 }
 
 .sympy-live-toolbar > button:first-child {
@@ -298,7 +299,12 @@
   }
 
   .sympy-live-toolbar {
-    margin: 0;
+    margin: 0 0 0.5em 0;
+    height: auto;
+  }
+  
+  .sympy-live-toolbar > * {
+    height: auto !important;
   }
 
   .sympy-live-completions-toolbar {
