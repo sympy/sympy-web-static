@@ -341,7 +341,6 @@ SymPy.Shell = Class.$extend({
 
     renderToolbar: function(settings) {
         this.toolbarEl = $('<p/>').
-            addClass('sympy-live-toolbar').
             append(
                 $('<div/>').append(
                     $('<label for="output-format">Output Format</label>'),

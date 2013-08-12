@@ -170,6 +170,27 @@
   cursor: pointer;
 }
 
+.sidebar_card h3:first-child:before {
+  content: "\f077";
+  font-family: FontAwesome;
+  margin-right: 0.5em;
+  color: #DDD;
+  display: inline-block;
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -ms-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+  transition: all 300ms ease-out;
+}
+
+.sidebar_card.closed h3:first-child:before {
+    -webkit-transform: rotate(-180deg);
+    -moz-transform: rotate(-180deg);
+    -ms-transform: rotate(-180deg);
+    -o-transform: rotate(-180deg);
+    transform: rotate(-180deg);
+}
+
 #user .content {
   padding: 0;
 }

@@ -3,10 +3,12 @@ function makeTransition(elemId) {
     var visible = true;
     return (function() {
         if (!visible) {
+            $(elemId).removeClass('closed');
             elem.addClass('clicked').slideDown();
             visible = true;
         }
         else {
+            $(elemId).addClass('closed');
             elem.removeClass('clicked').slideUp();
             visible = false;
         }
