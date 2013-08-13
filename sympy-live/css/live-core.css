@@ -170,7 +170,7 @@
   cursor: pointer;
 }
 
-.sidebar_card h3:first-child:before {
+.sidebar_card .clickable_top h3:first-child:before {
   content: "\f077";
   font-family: FontAwesome;
   margin-right: 0.5em;
@@ -183,13 +183,18 @@
   transition: all 300ms ease-out;
 }
 
-.sidebar_card.closed h3:first-child:before {
-    -webkit-transform: rotate(-180deg);
-    -moz-transform: rotate(-180deg);
-    -ms-transform: rotate(-180deg);
-    -o-transform: rotate(-180deg);
-    transform: rotate(-180deg);
+.sidebar_card.closed .clickable_top h3:first-child:before {
+  -webkit-transform: rotate(-180deg);
+  -moz-transform: rotate(-180deg);
+  -ms-transform: rotate(-180deg);
+  -o-transform: rotate(-180deg);
+  transform: rotate(-180deg);
 }
+
+/* #user h3:before { */
+/*   content: "" !important; */
+/*   margin: 0 !important; */
+/* } */
 
 #user .content {
   padding: 0;
