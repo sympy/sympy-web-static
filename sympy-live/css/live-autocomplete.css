@@ -7,6 +7,11 @@
     height: 30px;
     counter-reset: completion;
     display: inline-block;
+    -webkit-transition: height 300ms ease-out;
+    -moz-transition: height 300ms ease-out;
+    -ms-transition: height 300ms ease-out;
+    -o-transition: height 300ms ease-out;
+    transition: height 300ms ease-out;
 }
 
 .sympy-live-completions button {
