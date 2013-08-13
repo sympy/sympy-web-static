@@ -296,6 +296,18 @@
 
 /* Phones */
 @media screen and (max-device-width: 767px) {
+  header {
+    position: static;
+  }
+
+  #main-navigation {
+    position: absolute;
+  }
+
+  #main {
+    margin-top: 0.5em;
+  }
+  
   #example, #other_shells {
     display: none;
   }
@@ -359,6 +371,7 @@
     background-size: 32px 100%;
     background-repeat: no-repeat;
     background-position: 50% 0;
+    height: 32px !important;
   }
 
   .sympy-live-dialog {
