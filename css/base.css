@@ -428,3 +428,7 @@ textarea {
 select {
   font-family: 'Open Sans', sans-serif;
 }
+
+input, button, textarea {
+  border-radius: 0;
+}
