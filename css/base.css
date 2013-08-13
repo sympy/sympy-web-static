@@ -144,13 +144,17 @@ header img {
   border-radius: 7px;
   background: #FFF;
   margin-bottom: 2em;
-  padding: 0.5em 1em 1em 1em;
+  padding: 1em;
 }
 
 .sidebar_card h3 {
   font-weight: 300;
   font-size: 1.5em;
-  margin-bottom: 0.5em;
+  margin: 0;
+}
+
+.sidebar_card .content {
+  margin-top: 0.5em;
 }
 
 .date {
@@ -249,7 +253,6 @@ footer a:link, footer a:visited, footer a:hover, footer a:active {
 
   #main-navigation {
     background: #3B5526;
-    font-size: 0.9em;
     border-radius: 7px;
     position: static;
   }
@@ -310,35 +313,6 @@ footer a:link, footer a:visited, footer a:hover, footer a:active {
   
   section {
     padding: 0;
-  }
-
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-
-  ::-webkit-scrollbar-track {
-    border: 0;
-  }
-
-  body::-webkit-scrollbar-track {
-    background: #EEE;
-  }
-
-  body::-webkit-scrollbar-track:hover {
-    border: 1px solid #FFF;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #CCC;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #999;
-  }
-
-  ::-webkit-scrollbar-thumb:active {
-    background: #777;
   }
 }
 
