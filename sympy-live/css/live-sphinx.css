@@ -63,6 +63,7 @@
 
 #settings {
   border-top: 1px solid #222;
+  margin-top: 1em;
 }
 
 #settings h3 {
@@ -146,4 +147,55 @@ pre {
 .live-statement:hover {
   background-color: rgba(0,0,0,0.3);
   cursor: pointer;
+}
+
+/* Styles (copied from main CSS to avoid having to include more files +
+avoid leaking these styles to the Sphinx docs) */
+
+#shell button, .sympy-live-dialog button {
+  font-family: inherit;
+  background: #370C19;
+  color: #FFF;
+  -moz-transition: all .3s ease-in;
+  -webkit-transition: all .3s ease-in;
+  -o-transition: all .3s ease-in;
+  transition: all .3s ease-in;
+  cursor: pointer;
+  border-radius: 0;
+  border: 0;
+}
+
+#shell button.disabled {
+  cursor: default;
+}
+
+#shell button:hover, .sympy-live-dialog button:hover {
+  background: #552634;
+}
+
+#shell textarea, .sympy-live-dialog textarea {
+  border: 1px solid #CCC;
+}
+
+#shell select {
+  font-family: 'Open Sans', sans-serif;
+}
+
+#shell input, #shell textarea {
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+#shell #make-one-off-button {
+  background-image: url('/static/sympy-live/images/make_url.png');
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  background-size: 100%;
+}
+
+#shell #make-one-off-button:hover {
+  background-color: #AAA;
 }

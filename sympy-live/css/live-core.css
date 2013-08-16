@@ -94,7 +94,7 @@
 }
 
 .sympy-live-dialog {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -375,7 +375,6 @@
   }
 
   .sympy-live-dialog {
-    position: absolute;
     top: 0;
     left: 0;
     right: 0;
