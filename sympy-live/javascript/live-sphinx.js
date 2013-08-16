@@ -276,13 +276,24 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             duration = SymPy.DEFAULT_ANIMATION_DURATION;
         }
 
-        if ($("#settings .content").is(":visible")) {
-            $("#settings .content").slideUp(duration);
-            $("#settings h3").removeClass('shown');
+        $("#settings h3").toggleClass('shown');
+        var show = $("#settings h3").hasClass('shown');
+
+        if (this.isVisible()) {
+            if (show) {
+                $("#settings .content").slideDown(duration);
+            }
+            else {
+                $("#settings .content").slideUp(duration);
+            }
         }
         else {
-            $("#settings .content").slideDown(duration);
-            $("#settings h3").addClass('shown');
+            if (show) {
+                $("#settings .content").show();
+            }
+            else {
+                $("#settings .content").hide();
+            }
         }
     },
 
