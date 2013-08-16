@@ -11,6 +11,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         index = this.evalModeTypes.indexOf(config.record);
         this.evalMode = (index == -1) ? this.getCookie('sympy-evalMode', 'eval') : config.evalMode;
         this.banner = config.banner ? config.banner : '';
+        this.session = this.getCookie('sympy-session', null);
     },
 
     render: function(el) {
@@ -79,6 +80,11 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
 
         // Make enter the default submission button
         $("#submit-behavior").val("enter");
+    },
+
+    done: function(response) {
+        this.$super(response);
+        this.setCookie('sympy-session', this.session);
     },
 
     processCodeBlocks: function() {
@@ -303,6 +309,10 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
 
     fullscreen: function() {
         window.open("http://live.sympy.org");
+    },
+
+    makeURL: function(statements) {
+        return 'http://live.sympy.org/?evaluate=' + encodeURIComponent(statements);
     },
 
     updateSettings: function() {

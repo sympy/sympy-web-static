@@ -1090,10 +1090,15 @@ SymPy.Shell = Class.$extend({
         this.fullscreenMode = false;
     },
 
-    makeOneOffURL: function() {
-        $('.sympy-live-dialog').remove();
+    makeURL: function(statements) {
         var component = encodeURIComponent(this.getValue());
         var url = window.location.origin + window.location.pathname + '?evaluate=';
+
+        return url + encodeURIComponent(statements);
+    },
+
+    makeOneOffURL: function() {
+        $('.sympy-live-dialog').remove();
         var offset = this.makeOneOffEl.offset();
         var outerHeight = this.makeOneOffEl.outerHeight();
         var dialog = $('<div/>')
@@ -1118,12 +1123,13 @@ SymPy.Shell = Class.$extend({
         history.val(contents);
         output.append(history);
 
-        output.append($('<button><i class="icon-ok"></i> Make URL</button>').click(function() {
+        var makeButton = $('<button><i class="icon-ok"></i> Make URL</button>');
+        makeButton.click($.proxy(function() {
             close();
-            window.open(url + encodeURIComponent(history.val()));
-        }));
+            window.open(this.makeURL(history.val()));
+        }, this));
+        output.append(makeButton);
 
-        dialog.click(close);
         $('body').keydown(function(e) {
             if (e.which == SymPy.Keys.ESC) {
                 close();
