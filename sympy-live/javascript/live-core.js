@@ -332,6 +332,19 @@ SymPy.Shell = Class.$extend({
             $("#footer").appendTo($("#wrapper"));
 
             this.completer.expandCompletions = true;
+
+            // Move login to top of page
+            var container = $('<div id="mobile-login" class="mobile-header-item"/>').appendTo($('header'));
+            var link = $("#user a");
+            if (link.parent().is('h3')) {
+                // Not logged in
+                link.html('<i class="icon-user"/>');
+            }
+            else {
+                link.html('<i class="icon-off"/>');
+            }
+            link.appendTo(container);
+            $("#user").remove();
         }
 
         setInterval($.proxy(this.updatePrompt, this), 100);

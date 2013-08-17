@@ -65,13 +65,17 @@ header img {
 
 /* Navigation */
 
-#mobile-menu {
+#mobile-menu, .mobile-header-item {
   display: inline-block;
   float: right;
   width: 1.5em;
   height: 1.5em;
   color: #FFF;
   font-size: 1.5em;
+}
+
+#mobile-login a {
+  color: #FFF !important;
 }
 
 #mobile-menu i {
