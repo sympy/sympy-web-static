@@ -325,7 +325,6 @@ $(document).ready(function() {
     var path = SymPy.getBasePath('live-sphinx.js');
 
     $.get(path + '/sphinxbanner', function(data) {
-        $('head').append('<link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet" type="text/css" />');
         var shellEl = $('<div id="shell"/>').appendTo($(document.body));
         var settingsEl = $('<div id="settings"><div class="content"></div></div>');
         settingsEl.appendTo(shellEl);  // Needed to render the shell
