@@ -65,7 +65,6 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         checkbox.hide();
 
         this.toolbarEl.append(
-            $('<br/>'),
             $('<label for="evalMode">Evaluation Mode:</label>'),
             $('<select id="evalMode"/>').append(
                 $('<option value="eval">Evaluate</option>'),
@@ -277,30 +276,9 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         }
     },
 
-    toggleSettings: function(duration) {
-        if (typeof duration === "undefined") {
-            duration = SymPy.DEFAULT_ANIMATION_DURATION;
-        }
-
+    toggleSettings: function() {
         $("#settings h3").toggleClass('shown');
-        var show = $("#settings h3").hasClass('shown');
-
-        if (this.isVisible()) {
-            if (show) {
-                $("#settings .content").slideDown(duration);
-            }
-            else {
-                $("#settings .content").slideUp(duration);
-            }
-        }
-        else {
-            if (show) {
-                $("#settings .content").show();
-            }
-            else {
-                $("#settings .content").hide();
-            }
-        }
+        $("#settings").toggleClass('shown');
     },
 
     isVisible: function() {
@@ -335,6 +313,5 @@ $(document).ready(function() {
         });
         shell.render(shellEl);
         settingsEl.appendTo(shellEl); // Put it under the shell
-        shell.toggleSettings();
     });
 });
