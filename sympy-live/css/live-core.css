@@ -302,10 +302,6 @@
   #main {
     margin-top: 0.5em;
   }
-  
-  #example, #other_shells {
-    display: none;
-  }
 
   .sympy-live-output, .sympy-live-caret, .sympy-live-prompt {
     font-size: 1em;
