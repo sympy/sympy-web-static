@@ -338,10 +338,10 @@ SymPy.Shell = Class.$extend({
             var link = $("#user a");
             if (link.parent().is('h3')) {
                 // Not logged in
-                link.html('<i class="icon-user"/>');
+                link.html('Log In');
             }
             else {
-                link.html('<i class="icon-off"/>');
+                link.html('Log Out');
             }
             link.appendTo(container);
             $("#user").remove();

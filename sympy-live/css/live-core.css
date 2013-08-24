@@ -191,11 +191,6 @@
   transform: rotate(-180deg);
 }
 
-/* #user h3:before { */
-/*   content: "" !important; */
-/*   margin: 0 !important; */
-/* } */
-
 #user .content {
   padding: 0;
 }

@@ -5,6 +5,8 @@ $(document).ready(function() {
         el.hide();
 
         $('#mobile-menu').click(function() {
+            $(this).toggleClass('active');
+
             if (visible) {
                 el.css('opacity', 0);
                 visible = false;
