@@ -9,6 +9,9 @@ $(document).ready(function() {
 
             if (visible) {
                 el.css('opacity', 0);
+                setTimeout(function() {
+                    el.hide();
+                }, 300);
                 visible = false;
             }
             else {
