@@ -21,7 +21,7 @@
 .sympy-live-caret {
     font-family: monospace;
     font-size: 1em;
-    width: 5%;
+    width: 7%;
     border: 0;
     border-top: 1px solid silver;
     margin: 0;
@@ -37,7 +37,7 @@
 .sympy-live-prompt {
     font-family: monospace;
     font-size: 1em;
-    width: 94%;
+    width: 92%;
     border: 0;
     border-top: 1px solid silver;
     margin: 0;
