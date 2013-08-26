@@ -8,8 +8,13 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         this.$super(config);
         this.visible = false;
 
-        index = this.evalModeTypes.indexOf(config.record);
+        var index = this.evalModeTypes.indexOf(config.evalMode);
         this.evalMode = (index == -1) ? this.getCookie('sympy-evalMode', 'eval') : config.evalMode;
+        index = this.evalModeTypes.indexOf(config.dockMode);
+        this.dockMode = (index == -1) ? this.getCookie('sympy-dockMode', false) : config.dockMode;
+        if (this.dockMode === 'false') {
+            this.dockMode = false;
+        }
         this.banner = config.banner ? config.banner : '';
         this.session = this.getCookie('sympy-session', null);
     },
@@ -45,7 +50,10 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
 
         this.evalModeEl.change($.proxy(function(event) {
             this.updateSettings();
-            this.focus();
+        }, this));
+
+        this.dockModeEl.change($.proxy(function(event) {
+            this.updateSettings();
         }, this));
     },
 
@@ -57,25 +65,28 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             click($.proxy(this.toggleSettings, this));
         $("#settings h3").prepend($('<div class="arrow"/>'));
 
-        // We don't need the "force desktop version" option since there is
-        // no mobile version
-        var checkbox = $('#settings input[type="checkbox"]');
-        checkbox.prev().hide();
-        checkbox.next().hide();
-        checkbox.hide();
-
         this.toolbarEl.append(
-            $('<label for="evalMode">Evaluation Mode:</label>'),
-            $('<select id="evalMode"/>').append(
-                $('<option value="eval">Evaluate</option>'),
-                $('<option value="copy">Copy</option>')
+            $("<div/>").append(
+                $('<label for="evalMode">Evaluation Mode:</label>'),
+                $('<select id="evalMode"/>').append(
+                    $('<option value="eval">Evaluate</option>'),
+                    $('<option value="copy">Copy</option>')
+                )
             ),
-            $('<br/>')
+            $("<div/>").append(
+                $('<label for="dockMode">Dock to Right</label>'),
+                $('<input id="dockMode" type="checkbox"/>')
+            )
         );
         this.evalModeEl = $('#evalMode');
+        this.dockModeEl = $('#dockMode');
 
         var index = this.evalModeTypes.indexOf(this.evalMode);
         this.evalModeEl.children('option')[index].selected = true;
+
+        if (this.dockMode) {
+            this.dockModeEl.prop('checked', true);
+        }
 
         // Make enter the default submission button
         $("#submit-behavior").val("enter");
@@ -213,6 +224,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     },
 
     hide: function(duration) {
+        this.dockTo('bottom');
         if (typeof duration === "undefined") {
             duration = SymPy.DEFAULT_ANIMATION_DURATION;
         }
@@ -254,11 +266,15 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         $(this.shellEl).animate(
             this.shellDimensionsRestored,
             duration,
-            function() {
+            $.proxy(function() {
                 // Don't fix the height so that if the settings are
                 // expanded, the shell will expand with them
-                $(this).css('height', 'auto');
-            });
+                $(this.shellEl).css('height', 'auto');
+
+                if (this.isDockedToRight()) {
+                    this.dockTo('right');
+                }
+            }, this));
         this.visible = true;
         this.toggleShellEl.addClass('shown').children('span').
             html("Hide SymPy Live Shell");
@@ -279,10 +295,52 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     toggleSettings: function() {
         $("#settings h3").toggleClass('shown');
         $("#settings").toggleClass('shown');
+
+        var content = $("#settings .content");
+        console.log($("#settings").is('.shown'))
+        if ($("#settings").is('.shown')) {
+            var height = content.css('height', 'auto').height();
+            content.height(0).height(height);
+            if (this.isDockedToRight()) {
+                this.outputEl.height(this.outputEl.height() - height);
+            }
+        }
+        else {
+            if (this.isDockedToRight()) {
+                this.outputEl.height(this.outputEl.height() + content.height());
+            }
+            content.height(0);
+        }
+    },
+
+    dockTo: function(side) {
+        if (side === "bottom") {
+            $.map([this.shellEl, '.body', '.bodywrapper'], function(el) {
+                $(el).removeClass('dock-right');
+            });
+        }
+        else if (side === "right") {
+            $.map([this.shellEl, '.body', '.bodywrapper'], function(el) {
+                $(el).addClass('dock-right');
+            });
+        }
+        else {
+            throw {
+                name: "SymPy Live Sphinx Error",
+                message: "Cannot dock to " + side,
+                toString: function() {
+                    return this.name + ': ' + this.message;
+                }
+            };
+        }
     },
 
     isVisible: function() {
         return this.visible;
+    },
+
+    isDockedToRight: function() {
+        return this.dockModeEl.prop('checked');
     },
 
     fullscreen: function() {
@@ -296,6 +354,13 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     updateSettings: function() {
         this.$super();
         this.setCookie('sympy-evalMode', this.evalModeEl.val());
+        this.setCookie('sympy-dockMode', this.isDockedToRight());
+        if (this.isDockedToRight()) {
+            this.dockTo('right');
+        }
+        else {
+            this.dockTo('bottom');
+        }
     }
 });
 
