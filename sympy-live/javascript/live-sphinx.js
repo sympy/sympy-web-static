@@ -273,6 +273,12 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
 
                 if (this.isDockedToRight()) {
                     this.dockTo('right');
+
+                    if (!$("#settings").is('.shown')) {
+                        var height = $("#settings .content").css('height', 'auto').height();
+                        $("#settings .content").height(0);
+                        this.outputEl.height(this.outputEl.height() + height);
+                    }
                 }
             }, this));
         this.visible = true;
@@ -297,7 +303,6 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         $("#settings").toggleClass('shown');
 
         var content = $("#settings .content");
-        console.log($("#settings").is('.shown'))
         if ($("#settings").is('.shown')) {
             var height = content.css('height', 'auto').height();
             content.height(0).height(height);
@@ -315,14 +320,10 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
 
     dockTo: function(side) {
         if (side === "bottom") {
-            $.map([this.shellEl, '.body', '.bodywrapper'], function(el) {
-                $(el).removeClass('dock-right');
-            });
+            $('body').removeClass('live-sphinx-dock-right');
         }
         else if (side === "right") {
-            $.map([this.shellEl, '.body', '.bodywrapper'], function(el) {
-                $(el).addClass('dock-right');
-            });
+            $('body').addClass('live-sphinx-dock-right');
         }
         else {
             throw {

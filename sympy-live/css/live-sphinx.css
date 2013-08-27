@@ -145,7 +145,7 @@
 
 /* Right-docking mode */
 
-#shell.dock-right {
+.live-sphinx-dock-right #shell {
   position: fixed;
   height: auto;
   top: 0;
@@ -153,12 +153,17 @@
   bottom: 0;
 }
 
-.body.dock-right {
-  margin-right: 605px;
+.live-sphinx-dock-right .body {
+  margin-right: 610px;
 }
 
-.bodywrapper.dock-right {
+.live-sphinx-dock-right .bodywrapper {
   margin-right: 0;
+}
+
+/* Push header navigation left */
+.live-sphinx-dock-right .related .right:first-child {
+  margin-right: 620px !important;
 }
 
 /* Code blocks on page */
