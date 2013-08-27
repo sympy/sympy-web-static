@@ -11,7 +11,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         var index = this.evalModeTypes.indexOf(config.evalMode);
         this.evalMode = (index == -1) ? this.getCookie('sympy-evalMode', 'eval') : config.evalMode;
         index = this.evalModeTypes.indexOf(config.dockMode);
-        this.dockMode = (index == -1) ? this.getCookie('sympy-dockMode', false) : config.dockMode;
+        this.dockMode = (index == -1) ? this.getCookie('sympy-dockMode', true) : config.dockMode;
         if (this.dockMode === 'false') {
             this.dockMode = false;
         }
