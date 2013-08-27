@@ -11,7 +11,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         var index = this.evalModeTypes.indexOf(config.evalMode);
         this.evalMode = (index == -1) ? this.getCookie('sympy-evalMode', 'eval') : config.evalMode;
         index = this.evalModeTypes.indexOf(config.dockMode);
-        this.dockMode = (index == -1) ? this.getCookie('sympy-dockMode', false) : config.dockMode;
+        this.dockMode = (index == -1) ? this.getCookie('sympy-dockMode', true) : config.dockMode;
         if (this.dockMode === 'false') {
             this.dockMode = false;
         }
@@ -223,12 +223,26 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         return strippedLines.join('\n').trim();
     },
 
+    adjustOutputHeight: function(expand) {
+        if (this.isDockedToRight() && !$("#settings").is('.shown')) {
+            var height = $("#settings .content").css('height', 'auto').height();
+            $("#settings .content").height(0);
+            if (expand) {
+                this.outputEl.height(this.outputEl.height() + height);
+            }
+            else {
+                this.outputEl.height(this.outputEl.height() - height);
+            }
+        }
+    },
+
     hide: function(duration) {
         this.dockTo('bottom');
         if (typeof duration === "undefined") {
             duration = SymPy.DEFAULT_ANIMATION_DURATION;
         }
         this.disablePrompt();
+        this.adjustOutputHeight(false);
 
         this.shellDimensionsRestored = {
             width: this.shellEl.width(),
@@ -273,12 +287,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
 
                 if (this.isDockedToRight()) {
                     this.dockTo('right');
-
-                    if (!$("#settings").is('.shown')) {
-                        var height = $("#settings .content").css('height', 'auto').height();
-                        $("#settings .content").height(0);
-                        this.outputEl.height(this.outputEl.height() + height);
-                    }
+                    this.adjustOutputHeight(true);
                 }
             }, this));
         this.visible = true;
