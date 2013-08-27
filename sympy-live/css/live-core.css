@@ -34,6 +34,26 @@
     resize: none;
 }
 
+@media screen and (min-width: 1280px) {
+  .sympy-live-caret {
+    width: 7%;
+  }
+
+  .sympy-live-prompt {
+    width: 92%;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .sympy-live-caret {
+    width: 5%;
+  }
+
+  .sympy-live-prompt {
+    width: 93%;
+  }
+}
+
 .sympy-live-prompt {
     font-family: monospace;
     font-size: 1em;
