@@ -101,7 +101,7 @@
   -moz-transform: rotate(180deg) translate(0px, 0px);
   -o-transform: rotate(180deg) translate(0px, 0px);
   -ms-transform: rotate(180deg) translate(0px, 0px);
-  -transform: rotate(180deg) translate(0px, 0px);
+  transform: rotate(180deg) translate(0px, 0px);
 }
 
 #settings.shown h3 div.arrow {
@@ -109,7 +109,7 @@
   -moz-transform: rotate(0deg) translate(0px, 0px);
   -o-transform: rotate(0deg) translate(0px, 0px);
   -ms-transform: rotate(0deg) translate(0px, 0px);
-  -transform: rotate(0deg) translate(0px, 0px);
+  transform: rotate(0deg) translate(0px, 0px);
 }
 
 #toggleShell div.arrow {
@@ -117,7 +117,7 @@
   -moz-transform: rotate(-45deg) translate(0px, 0px);
   -o-transform: rotate(-45deg) translate(0px, 0px);
   -ms-transform: rotate(-45deg) translate(0px, 0px);
-  -transform: rotate(-45deg) translate(0px, 0px);
+  transform: rotate(-45deg) translate(0px, 0px);
 }
 
 #toggleShell.shown div.arrow {
@@ -125,7 +125,7 @@
   -moz-transform: rotate(135deg) translate(0px, 0px);
   -o-transform: rotate(135deg) translate(0px, 0px);
   -ms-transform: rotate(135deg) translate(0px, 0px);
-  -transform: rotate(135deg) translate(0px, 0px);
+  transform: rotate(135deg) translate(0px, 0px);
 }
 
 #settings .content {
