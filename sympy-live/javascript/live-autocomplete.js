@@ -44,6 +44,7 @@ SymPy.Completer = Class.$extend({
         else if (expand === 'false') {
             this.expandCompletions = false;
         }
+        this.completionRequest = null;
     },
 
     setup: function() {
@@ -90,7 +91,14 @@ SymPy.Completer = Class.$extend({
 
     complete: function(statement, selection) {
         if (statement === this.replaceText) {
-            this.doComplete(this.completions[this.currentCompletion], true);
+            if (this.completionRequest !== null) {
+                this.completionRequest.done($.proxy(function() {
+                    // check again to avoid race conditions
+                    if (statement === this.replaceText) {
+                        this.doComplete(this.completions[this.currentCompletion], true);
+                    }
+                }, this));
+            }
             return;
         }
         if (statement !== null) {
@@ -117,17 +125,16 @@ SymPy.Completer = Class.$extend({
                 session: this.shell.session || null,
                 statement: statement
             };
-            $.ajax((this.basePath || '') + '/complete', {
+            this.completionRequest = $.ajax((this.basePath || '') + '/complete', {
                 type: 'POST',
                 data: JSON.stringify(data),
                 dataType: 'json',
-                success: $.proxy(function(data, textStatus, xhr) {
-                    this.completionSuccess(data);
-                }, this),
                 error: $.proxy(function(xhr, textStatus, error) {
                     this.completionError();
                 }, this)
-            });
+            }).done($.proxy(function(data, textStatus, xhr) {
+                this.completionSuccess(data);
+            }, this));
         }
     },
 
