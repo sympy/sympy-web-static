@@ -6,7 +6,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
 
     __init__: function(config) {
         this.$super(config);
-        this.visible = false;
+        this.visible = this.getCookie('sympy-visible', false);
 
         var index = this.evalModeTypes.indexOf(config.evalMode);
         this.evalMode = (index == -1) ? this.getCookie('sympy-evalMode', 'eval') : config.evalMode;
@@ -55,6 +55,11 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         this.dockModeEl.change($.proxy(function(event) {
             this.updateSettings();
         }, this));
+
+        if (this.visible) {
+            this.visible = false; // otherwise show() returns
+            this.show();
+        }
     },
 
     renderToolbar: function(settings) {
@@ -305,6 +310,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         else {
             this.show(duration);
         }
+        this.setCookie('sympy-visible', this.visible);
     },
 
     toggleSettings: function() {
