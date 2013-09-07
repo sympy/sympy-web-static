@@ -228,16 +228,22 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         return strippedLines.join('\n').trim();
     },
 
-    adjustOutputHeight: function(expand) {
-        if (this.isDockedToRight() && !$("#settings").is('.shown')) {
-            var height = $("#settings .content").css('height', 'auto').height();
-            $("#settings .content").height(0);
-            if (expand) {
-                this.outputEl.height(this.outputEl.height() + height);
-            }
-            else {
-                this.outputEl.height(this.outputEl.height() - height);
-            }
+    adjustOutputHeight: function(adjustment) {
+        if (typeof adjustment === "undefined") {
+            adjustment = 0;
+        }
+        // adjustment is for settings - because of animation, the height
+        // calculated here is incorrect
+        if (this.isDockedToRight()) {
+            var fullHeight = $('#shell').height();
+            fullHeight -= $('#shell h2').outerHeight(true);
+            fullHeight -= $('#shell .sympy-live-prompt').outerHeight(true);
+            fullHeight -= $('#shell .sympy-live-autocompletions-container').outerHeight(true);
+            fullHeight -= $('#shell .sympy-live-toolbar').outerHeight(true);
+            fullHeight -= $('#settings').outerHeight(true);
+            fullHeight -= adjustment;
+
+            this.outputEl.height(fullHeight);
         }
     },
 
@@ -247,7 +253,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             duration = SymPy.DEFAULT_ANIMATION_DURATION;
         }
         this.disablePrompt();
-        this.adjustOutputHeight(false);
+        this.adjustOutputHeight();
 
         this.shellDimensionsRestored = {
             width: this.shellEl.width(),
@@ -292,7 +298,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
 
                 if (this.isDockedToRight()) {
                     this.dockTo('right');
-                    this.adjustOutputHeight(true);
+                    this.adjustOutputHeight();
                 }
             }, this));
         this.visible = true;
@@ -322,23 +328,26 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             var height = content.css('height', 'auto').height();
             content.height(0).height(height);
             if (this.isDockedToRight()) {
-                this.outputEl.height(this.outputEl.height() - height);
+                this.adjustOutputHeight(height);
             }
         }
         else {
-            if (this.isDockedToRight()) {
-                this.outputEl.height(this.outputEl.height() + content.height());
-            }
+            var height = content.css('height', 'auto').height();
             content.height(0);
+            if (this.isDockedToRight()) {
+                this.adjustOutputHeight(-height);
+            }
         }
     },
 
     dockTo: function(side) {
         if (side === "bottom") {
             $('body').removeClass('live-sphinx-dock-right');
+            $('#shell .sympy-live-output').attr('style', '');
         }
         else if (side === "right") {
             $('body').addClass('live-sphinx-dock-right');
+            this.adjustOutputHeight();
         }
         else {
             throw {
