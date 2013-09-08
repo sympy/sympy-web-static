@@ -60,6 +60,8 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             this.visible = false; // otherwise show() returns
             this.show();
         }
+
+        this.showStoredSession();
     },
 
     renderToolbar: function(settings) {
@@ -97,9 +99,78 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         $("#submit-behavior").val("enter");
     },
 
+    evaluate: function() {
+        this.storeInput(this.getValue());
+        this.$super();
+    },
+
     done: function(response) {
         this.$super(response);
         this.setCookie('sympy-session', this.session);
+        this.storeOutput(response.output);
+    },
+
+    storeInput: function(statement) {
+        if (!('localStorage' in window) || window['localStorage'] === null) {
+            return;
+        }
+        var inputs = [];
+        if (window.localStorage['inputs']) {
+            inputs = JSON.parse(window.localStorage['inputs']);
+        }
+        inputs.push(statement);
+        window.localStorage['inputs'] = JSON.stringify(inputs);
+    },
+
+    storeOutput: function(output) {
+        if (!('localStorage' in window) || window['localStorage'] === null) {
+            return;
+        }
+        var outputs = [];
+        if (window.localStorage['outputs']) {
+            outputs = JSON.parse(window.localStorage['outputs']);
+        }
+        outputs.push(output);
+        window.localStorage['outputs'] = JSON.stringify(outputs);
+    },
+
+    showStoredSession: function() {
+        if (!('localStorage' in window) || window['localStorage'] === null) {
+            return;
+        }
+        var inputs = window.localStorage['inputs'];
+        var outputs = window.localStorage['outputs'];
+
+        if (!inputs || !outputs) return;
+        inputs = JSON.parse(inputs);
+        outputs = JSON.parse(outputs);
+        if (inputs.length > outputs.length) return;
+
+        for (var i = 0; i < inputs.length; i++) {
+            $('<div/>').html(SymPy.escapeHTML(this.prefixStatement(inputs[i]))).appendTo(this.outputEl);
+            this.history.push(inputs[i]);
+            this.historyCursor = this.history.length - 1;
+
+            if (outputs[i].length) {
+                var element = $("<div/>").html(SymPy.escapeHTML(outputs[i]));
+                if (this.isLaTeX()) {
+                    element.addClass('sympy-live-hidden');
+                }
+                element.appendTo(this.outputEl);
+
+                if (this.printerEl.val() == 'latex') {
+                    var postprocessLaTeX = function(element) {
+                        return function() {
+                            element.removeClass('sympy-live-hidden');
+                            this.scrollToDefault();
+                        };
+                    }
+
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, element.get(0)],
+                                      [$.proxy(postprocessLaTeX(element), this)]);
+                }
+            }
+        }
     },
 
     processCodeBlocks: function() {
@@ -366,6 +437,15 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
 
     isDockedToRight: function() {
         return this.dockModeEl.prop('checked');
+    },
+
+    clear: function() {
+        this.$super();
+        if ('localStorage' in window && window['localStorage'] !== null) {
+            window.localStorage.removeItem('inputs');
+            window.localStorage.removeItem('outputs');
+        }
+
     },
 
     fullscreen: function() {

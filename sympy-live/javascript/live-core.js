@@ -768,6 +768,7 @@ SymPy.Shell = Class.$extend({
     },
 
     updateHistory: function(value) {
+        // TODO: is this function written incorrectly?
         this.historyCursor = this.history.length - 1;
         this.history[this.historyCursor] = value;
     },
@@ -797,8 +798,11 @@ SymPy.Shell = Class.$extend({
         }
     },
 
-    prefixStatement: function() {
-        var lines = this.getValue().split('\n');
+    prefixStatement: function(statement) {
+        if (typeof statement === "undefined") {
+            statement = this.getValue();
+        }
+        var lines = statement.split('\n');
 
         lines[0] = ">>> " + lines[0];
 
