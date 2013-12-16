@@ -164,11 +164,16 @@
 
 @media only screen and (max-width: 767px) {
   .sympy-live-completions {
+    float: right;
     width: 67%;
   }
+
   .sympy-live-completions-toolbar {
     width: 30%;
+    height: auto;
+    float: left;
   }
+  
   .sympy-live-completions li, .sympy-live-completions.expanded li {
     width: 90%;
   }

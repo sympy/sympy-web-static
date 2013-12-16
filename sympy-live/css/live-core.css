@@ -22,13 +22,13 @@
     font-family: monospace;
     font-size: 1em;
     width: 10%;
-    width: -moz-calc(3.5em);
-    width: -webkit-calc(3.5em);
-    width: calc(3.5em);
+    width: -moz-calc(3em);
+    width: -webkit-calc(3em);
+    width: calc(3em);
     border: 0;
     border-top: 1px solid silver;
     margin: 0;
-    padding: 5px 0;
+    padding: 5px 0 5px 0.25em;
     margin-right: 0;
     outline: none;
     overflow: hidden;
@@ -40,9 +40,9 @@
     font-family: monospace;
     font-size: 1em;
     width: 90%;
-    width: -moz-calc(100% - 3.5em);
-    width: -webkit-calc(100% - 3.5em);
-    width: calc(100% - 3.5em);
+    width: -moz-calc(100% - 3.25em);
+    width: -webkit-calc(100% - 3.25em);
+    width: calc(100% - 3.25em);
     border: 0;
     border-top: 1px solid silver;
     margin: 0;
@@ -309,6 +309,10 @@
     margin-top: 0.5em;
   }
 
+  #content {
+    padding: 7px 0;
+  }
+
   .sympy-live-output, .sympy-live-caret, .sympy-live-prompt {
     font-size: 1em;
     padding: 0;
@@ -319,9 +323,13 @@
   }
 
   .sympy-live-prompt {
-    width: -moz-calc(100% - 3.5em - 35px);
-    width: -webkit-calc(100% - 3.5em - 35px);
-    width: calc(100% - 3.5em - 35px);
+    width: -moz-calc(100% - 3em - 30px);
+    width: -webkit-calc(100% - 3em - 30px);
+    width: calc(100% - 3em - 30px);
+  }
+
+  .sympy-live-prompt, .sympy-live-caret {
+    float: left;
   }
 
   .content {
@@ -335,10 +343,6 @@
   
   .sympy-live-toolbar > * {
     height: auto !important;
-  }
-
-  .sympy-live-completions-toolbar {
-    height: auto;
   }
 
   #sympy-live-toolbar-history {
