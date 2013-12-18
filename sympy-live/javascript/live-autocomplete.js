@@ -44,17 +44,18 @@ SymPy.Completer = Class.$extend({
         else if (expand === 'false') {
             this.expandCompletions = false;
         }
+        this.completionRequest = null;
     },
 
     setup: function() {
         this.toolbarEl = this.containerEl.append(
             $("<div />", {"class": 'sympy-live-completions-toolbar'})
-                .append($("<button><span>&#x25BC;</span></button>")
+                .append($('<button><i class="icon-caret-down"></i></button>')
                         .attr({"id": 'sympy-live-completions-toggle'}))
-                .append($("<button>&lt;</button>")
+                .append($('<button><i class="icon-angle-left"></i></button>')
                         .attr({"class": 'disabled',
                                'id': 'sympy-live-completions-prev'}))
-                .append($("<button>&gt;</button>")
+                .append($('<button><i class="icon-angle-right"></i></button>')
                         .attr({"class": 'disabled',
                                "id": 'sympy-live-completions-next'}))
         ).children('div');
@@ -90,7 +91,14 @@ SymPy.Completer = Class.$extend({
 
     complete: function(statement, selection) {
         if (statement === this.replaceText) {
-            this.doComplete(this.completions[this.currentCompletion], true);
+            if (this.completionRequest !== null) {
+                this.completionRequest.done($.proxy(function() {
+                    // check again to avoid race conditions
+                    if (statement === this.replaceText) {
+                        this.doComplete(this.completions[this.currentCompletion], true);
+                    }
+                }, this));
+            }
             return;
         }
         if (statement !== null) {
@@ -117,17 +125,16 @@ SymPy.Completer = Class.$extend({
                 session: this.shell.session || null,
                 statement: statement
             };
-            $.ajax((this.basePath || '') + '/complete', {
+            this.completionRequest = $.ajax((this.basePath || '') + '/complete', {
                 type: 'POST',
                 data: JSON.stringify(data),
                 dataType: 'json',
-                success: $.proxy(function(data, textStatus, xhr) {
-                    this.completionSuccess(data);
-                }, this),
                 error: $.proxy(function(xhr, textStatus, error) {
                     this.completionError();
                 }, this)
-            });
+            }).done($.proxy(function(data, textStatus, xhr) {
+                this.completionSuccess(data);
+            }, this));
         }
     },
 

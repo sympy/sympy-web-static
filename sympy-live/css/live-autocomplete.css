@@ -7,6 +7,11 @@
     height: 30px;
     counter-reset: completion;
     display: inline-block;
+    -webkit-transition: height 300ms ease-out;
+    -moz-transition: height 300ms ease-out;
+    -ms-transition: height 300ms ease-out;
+    -o-transition: height 300ms ease-out;
+    transition: height 300ms ease-out;
 }
 
 .sympy-live-completions button {
@@ -56,11 +61,16 @@
 .sympy-live-completions-toolbar button {
     width: 32%;
     height: 100%;
+    border-right: 1px solid #FFF;
 }
 
 .sympy-live-completions-toolbar button.disabled {
     background-color: #999;
     color: #000;
+}
+
+.sympy-live-completions-toolbar button:last-child {
+    border: 0;
 }
 
 .sympy-live-completions-toolbar .sympy-live-toolbar button {
@@ -69,32 +79,32 @@
     margin: 5px 0;
 }
 
-.sympy-live-completions-toolbar button:first-child span {
-    display: block;
-    -moz-transition: all 1s ease-in;
-    -webkit-transition: all 1s ease-in;
-    -o-transition: all 1s ease-in;
-    transition: all 1s ease-in;
+.sympy-live-completions-toolbar button:first-child i {
+    display: inline-block;
+    text-align: center;
+    -moz-transition: all 300ms ease-in;
+    -webkit-transition: all 300ms ease-in;
+    -o-transition: all 300ms ease-in;
+    transition: all 300ms ease-in;
     -webkit-transform: rotate(0deg) translate(0px, 0px);
     -moz-transform: rotate(0deg) translate(0px, 0px);
     -o-transform: rotate(0deg) translate(0px, 0px);
     -ms-transform: rotate(0deg) translate(0px, 0px);
-    -transform: rotate(0deg) translate(0px, 0px);
+    transform: rotate(0deg) translate(0px, 0px);
 }
 
-.sympy-live-completions-toolbar button.hidden:first-child span {
+.sympy-live-completions-toolbar button.hidden:first-child i {
     -webkit-transform: rotate(-180deg) translate(0px, 0px);
     -moz-transform: rotate(-180deg) translate(0px, 0px);
     -o-transform: rotate(-180deg) translate(0px, 0px);
     -ms-transform: rotate(-180deg) translate(0px, 0px);
-    -transform: rotate(-180deg) translate(0px, 0px);
+    transform: rotate(-180deg) translate(0px, 0px);
 }
 
-@media screen and (max-device-width: 767px) {
+@media screen and (max-width: 767px) {
   .sympy-live-completions {
     padding: 0em 0.25em;
     height: 2em;
-    vertical-align: center;
     font-size: 12pt;
     width: 82%;
   }
@@ -150,28 +160,39 @@
   #sympy-live-completions-prev, #sympy-live-completions-next, #sympy-live-completions-toggle {
     display: none;
   }
+}
 
-  @media only screen and (max-width: 320px){
-    .sympy-live-completions {
-      width: 67%;
-    }
-    .sympy-live-completions-toolbar {
-      width: 30%;
-    }
-    .sympy-live-completions li, .sympy-live-completions.expanded li {
-      width: 70%;
-    }
+@media only screen and (max-width: 767px) {
+  .sympy-live-completions {
+    float: right;
+    width: 67%;
   }
 
-  @media only screen and (min-width: 321px){
-    .sympy-live-completions {
-      width: 77%;
-    }
-    .sympy-live-completions-toolbar {
-      width: 20%;
-    }
-    .sympy-live-completions li, .sympy-live-completions.expanded li {
-      width: 40%;
-    }
+  .sympy-live-completions-toolbar {
+    width: 30%;
+    height: auto;
+    float: left;
+  }
+  
+  .sympy-live-completions li, .sympy-live-completions.expanded li {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 767px) and (orientation: landscape) {
+  .sympy-live-completions li, .sympy-live-completions.expanded li {
+    width: 45%;
+  }
+}
+
+@media only screen and (min-width: 768px){
+  .sympy-live-completions {
+    width: 77%;
+  }
+  .sympy-live-completions-toolbar {
+    width: 20%;
+  }
+  .sympy-live-completions li, .sympy-live-completions.expanded li {
+    width: 40%;
   }
 }

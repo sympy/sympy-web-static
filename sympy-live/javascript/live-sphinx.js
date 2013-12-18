@@ -6,12 +6,17 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
 
     __init__: function(config) {
         this.$super(config);
-        this.visible = false;
-        this.queuedStatements = [];
+        this.visible = this.getCookie('sympy-visible', false);
 
-        index = this.evalModeTypes.indexOf(config.record);
+        var index = this.evalModeTypes.indexOf(config.evalMode);
         this.evalMode = (index == -1) ? this.getCookie('sympy-evalMode', 'eval') : config.evalMode;
+        index = this.evalModeTypes.indexOf(config.dockMode);
+        this.dockMode = (index == -1) ? this.getCookie('sympy-dockMode', true) : config.dockMode;
+        if (this.dockMode === 'false') {
+            this.dockMode = false;
+        }
         this.banner = config.banner ? config.banner : '';
+        this.session = this.getCookie('sympy-session', null);
     },
 
     render: function(el) {
@@ -43,10 +48,20 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         // Change Fullscreen to go to main website
         $("#fullscreen-button").html("Go to SymPy Live");
 
-	    this.evalModeEl.change($.proxy(function(event) {
+        this.evalModeEl.change($.proxy(function(event) {
             this.updateSettings();
-            this.focus();
         }, this));
+
+        this.dockModeEl.change($.proxy(function(event) {
+            this.updateSettings();
+        }, this));
+
+        if (this.visible) {
+            this.visible = false; // otherwise show() returns
+            this.show();
+        }
+
+        this.showStoredSession();
     },
 
     renderToolbar: function(settings) {
@@ -57,47 +72,104 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             click($.proxy(this.toggleSettings, this));
         $("#settings h3").prepend($('<div class="arrow"/>'));
 
-        // We don't need the "force desktop version" option since there is
-        // no mobile version
-        var checkbox = $('#settings input[type="checkbox"]');
-        checkbox.prev().hide();
-        checkbox.next().hide();
-        checkbox.hide();
-
         this.toolbarEl.append(
-            $('<br/>'),
-            $('<label for="evalMode">Evaluation Mode:</label>'),
-            $('<select id="evalMode"/>').append(
-                $('<option value="eval">Evaluate</option>'),
-                $('<option value="copy">Copy</option>')
+            $("<div/>").append(
+                $('<label for="evalMode">Evaluation Mode:</label>'),
+                $('<select id="evalMode"/>').append(
+                    $('<option value="eval">Evaluate</option>'),
+                    $('<option value="copy">Copy</option>')
+                )
             ),
-            $('<br/>')
+            $("<div/>").append(
+                $('<label for="dockMode">Dock to Right</label>'),
+                $('<input id="dockMode" type="checkbox"/>')
+            )
         );
         this.evalModeEl = $('#evalMode');
+        this.dockModeEl = $('#dockMode');
 
         var index = this.evalModeTypes.indexOf(this.evalMode);
         this.evalModeEl.children('option')[index].selected = true;
+
+        if (this.dockMode) {
+            this.dockModeEl.prop('checked', true);
+        }
 
         // Make enter the default submission button
         $("#submit-behavior").val("enter");
     },
 
+    evaluate: function() {
+        this.storeInput(this.getValue());
+        this.$super();
+    },
+
     done: function(response) {
         this.$super(response);
-        if (this.queuedStatements.length !== 0) {
-            this.dequeueStatement();
-            this.evaluate();
+        this.setCookie('sympy-session', this.session);
+        this.storeOutput(response.output);
+    },
+
+    storeInput: function(statement) {
+        if (!('localStorage' in window) || window['localStorage'] === null) {
+            return;
         }
+        var inputs = [];
+        if (window.localStorage['inputs']) {
+            inputs = JSON.parse(window.localStorage['inputs']);
+        }
+        inputs.push(statement);
+        window.localStorage['inputs'] = JSON.stringify(inputs);
     },
 
-    error: function(xhr, status, error) {
-        this.$super(xhr, status, error);
-        this.queuedStatements.length = 0;
+    storeOutput: function(output) {
+        if (!('localStorage' in window) || window['localStorage'] === null) {
+            return;
+        }
+        var outputs = [];
+        if (window.localStorage['outputs']) {
+            outputs = JSON.parse(window.localStorage['outputs']);
+        }
+        outputs.push(output);
+        window.localStorage['outputs'] = JSON.stringify(outputs);
     },
 
-    dequeueStatement: function() {
-        if (this.queuedStatements.length !== 0) {
-            this.setValue(this.queuedStatements.shift());
+    showStoredSession: function() {
+        if (!('localStorage' in window) || window['localStorage'] === null) {
+            return;
+        }
+        var inputs = window.localStorage['inputs'];
+        var outputs = window.localStorage['outputs'];
+
+        if (!inputs || !outputs) return;
+        inputs = JSON.parse(inputs);
+        outputs = JSON.parse(outputs);
+        if (inputs.length > outputs.length) return;
+
+        for (var i = 0; i < inputs.length; i++) {
+            $('<div/>').html(SymPy.escapeHTML(this.prefixStatement(inputs[i]))).appendTo(this.outputEl);
+            this.history.push(inputs[i]);
+            this.historyCursor = this.history.length - 1;
+
+            if (outputs[i].length) {
+                var element = $("<div/>").html(SymPy.escapeHTML(outputs[i]));
+                if (this.isLaTeX()) {
+                    element.addClass('sympy-live-hidden');
+                }
+                element.appendTo(this.outputEl);
+
+                if (this.printerEl.val() == 'latex') {
+                    var postprocessLaTeX = function(element) {
+                        return function() {
+                            element.removeClass('sympy-live-hidden');
+                            this.scrollToDefault();
+                        };
+                    }
+
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, element.get(0)],
+                                      [$.proxy(postprocessLaTeX(element), this)]);
+                }
+            }
         }
     },
 
@@ -227,11 +299,32 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         return strippedLines.join('\n').trim();
     },
 
+    adjustOutputHeight: function(adjustment) {
+        if (typeof adjustment === "undefined") {
+            adjustment = 0;
+        }
+        // adjustment is for settings - because of animation, the height
+        // calculated here is incorrect
+        if (this.isDockedToRight()) {
+            var fullHeight = $('#shell').height();
+            fullHeight -= $('#shell h2').outerHeight(true);
+            fullHeight -= $('#shell .sympy-live-prompt').outerHeight(true);
+            fullHeight -= $('#shell .sympy-live-autocompletions-container').outerHeight(true);
+            fullHeight -= $('#shell .sympy-live-toolbar').outerHeight(true);
+            fullHeight -= $('#settings').outerHeight(true);
+            fullHeight -= adjustment;
+
+            this.outputEl.height(fullHeight);
+        }
+    },
+
     hide: function(duration) {
+        this.dockTo('bottom');
         if (typeof duration === "undefined") {
             duration = SymPy.DEFAULT_ANIMATION_DURATION;
         }
         this.disablePrompt();
+        this.adjustOutputHeight();
 
         this.shellDimensionsRestored = {
             width: this.shellEl.width(),
@@ -269,11 +362,16 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         $(this.shellEl).animate(
             this.shellDimensionsRestored,
             duration,
-            function() {
+            $.proxy(function() {
                 // Don't fix the height so that if the settings are
                 // expanded, the shell will expand with them
-                $(this).css('height', 'auto');
-            });
+                $(this.shellEl).css('height', 'auto');
+
+                if (this.isDockedToRight()) {
+                    this.dockTo('right');
+                    this.adjustOutputHeight();
+                }
+            }, this));
         this.visible = true;
         this.toggleShellEl.addClass('shown').children('span').
             html("Hide SymPy Live Shell");
@@ -289,20 +387,47 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         else {
             this.show(duration);
         }
+        this.setCookie('sympy-visible', this.visible);
     },
 
-    toggleSettings: function(duration) {
-        if (typeof duration === "undefined") {
-            duration = SymPy.DEFAULT_ANIMATION_DURATION;
-        }
+    toggleSettings: function() {
+        $("#settings h3").toggleClass('shown');
+        $("#settings").toggleClass('shown');
 
-        if ($("#settings .content").is(":visible")) {
-            $("#settings .content").slideUp(duration);
-            $("#settings h3").removeClass('shown');
+        var content = $("#settings .content");
+        if ($("#settings").is('.shown')) {
+            var height = content.css('height', 'auto').height();
+            content.height(0).height(height);
+            if (this.isDockedToRight()) {
+                this.adjustOutputHeight(height);
+            }
         }
         else {
-            $("#settings .content").slideDown(duration);
-            $("#settings h3").addClass('shown');
+            var height = content.css('height', 'auto').height();
+            content.height(0);
+            if (this.isDockedToRight()) {
+                this.adjustOutputHeight(-height);
+            }
+        }
+    },
+
+    dockTo: function(side) {
+        if (side === "bottom") {
+            $('body').removeClass('live-sphinx-dock-right');
+            $('#shell .sympy-live-output').attr('style', '');
+        }
+        else if (side === "right") {
+            $('body').addClass('live-sphinx-dock-right');
+            this.adjustOutputHeight();
+        }
+        else {
+            throw {
+                name: "SymPy Live Sphinx Error",
+                message: "Cannot dock to " + side,
+                toString: function() {
+                    return this.name + ': ' + this.message;
+                }
+            };
         }
     },
 
@@ -310,13 +435,37 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         return this.visible;
     },
 
+    isDockedToRight: function() {
+        return this.dockModeEl.prop('checked');
+    },
+
+    clear: function() {
+        this.$super();
+        if ('localStorage' in window && window['localStorage'] !== null) {
+            window.localStorage.removeItem('inputs');
+            window.localStorage.removeItem('outputs');
+        }
+
+    },
+
     fullscreen: function() {
         window.open("http://live.sympy.org");
+    },
+
+    makeURL: function(statements) {
+        return 'http://live.sympy.org/?evaluate=' + encodeURIComponent(statements);
     },
 
     updateSettings: function() {
         this.$super();
         this.setCookie('sympy-evalMode', this.evalModeEl.val());
+        this.setCookie('sympy-dockMode', this.isDockedToRight());
+        if (this.isDockedToRight()) {
+            this.dockTo('right');
+        }
+        else {
+            this.dockTo('bottom');
+        }
     }
 });
 
@@ -334,6 +483,5 @@ $(document).ready(function() {
         });
         shell.render(shellEl);
         settingsEl.appendTo(shellEl); // Put it under the shell
-        shell.toggleSettings();
     });
 });

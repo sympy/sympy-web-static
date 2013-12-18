@@ -3,13 +3,27 @@ function makeTransition(elemId) {
     var visible = true;
     return (function() {
         if (!visible) {
+            $(elemId).removeClass('closed');
             elem.addClass('clicked').slideDown();
             visible = true;
         }
         else {
+            $(elemId).addClass('closed');
             elem.removeClass('clicked').slideUp();
             visible = false;
         }
+    });
+}
+
+function makeExecutable(index, elem) {
+    elem = $(elem);
+    elem.attr('title', 'Click to execute in shell');
+    elem.click(function() {
+        $.each(utilities.extractStatements(elem), function(i, statement) {
+            SymPy.SHELL_INSTANCE.queueStatement(statement);
+        });
+        SymPy.SHELL_INSTANCE.dequeueStatement();
+        SymPy.SHELL_INSTANCE.evaluate();
     });
 }
 
@@ -18,6 +32,8 @@ $(document).ready(function(){
         var elem_id = $(elem).parents('div').first().attr('id');
         $(elem).click(makeTransition('#' + elem_id));
     });
+
+    $('.executable').each(makeExecutable);
 
     setTimeout(function() {
         if (window.location.hash) {

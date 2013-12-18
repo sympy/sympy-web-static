@@ -17,7 +17,7 @@
 // old jQuery. Remove if using Sphinx >= 1.2
 if (!jQuery.isNumeric) {
     jQuery.isNumeric = function( obj ) {
-	    return !isNaN( parseFloat(obj) ) && isFinite( obj );
+        return !isNaN( parseFloat(obj) ) && isFinite( obj );
     };
 }
 if (!jQuery.fn.on) {
@@ -116,6 +116,8 @@ SymPy.HISTORY_TEMPLATE = '<div id="sympy-live-toolbar-history">' +
     '<button id="button-history-next">↓</button>' +
     '</div>';
 
+SymPy.SHELL_INSTANCE = null;
+
 SymPy.Shell = Class.$extend({
     banner: null,
     history: [''],
@@ -162,6 +164,8 @@ SymPy.Shell = Class.$extend({
             this.banner = SymPy.rstrip(this.banner) + '\n\n';
         }
 
+        this.queuedStatements = [];
+
         this.isPhone = window.matchMedia("screen and (max-device-width: 767px)").matches;
         this.isMobile = window.matchMedia("screen and (max-device-width: 1280px)").matches;
 
@@ -187,6 +191,8 @@ SymPy.Shell = Class.$extend({
             this.tabWidth = config.tabWidth;
             delete config.tabWidth;
         }
+
+        SymPy.SHELL_INSTANCE = this;
     },
 
     render: function(el) {
@@ -211,7 +217,9 @@ SymPy.Shell = Class.$extend({
             addClass('sympy-live-prompt').
             attr({
                 rows: '4',
-                spellcheck: 'false'
+                spellcheck: 'false',
+                autocorrect: 'off',
+                autocapitalize: 'off'
             }).
             appendTo(el);
 
@@ -226,8 +234,8 @@ SymPy.Shell = Class.$extend({
         }, this);
         this.completer.setup();
 
-	    this.renderButtons(el);
-	    var settings = $('#settings .content');
+        this.renderButtons(el);
+        var settings = $('#settings .content');
         this.renderToolbar(settings);
 
         this.caretEl.on("focus", function(event) {
@@ -324,6 +332,19 @@ SymPy.Shell = Class.$extend({
             $("#footer").appendTo($("#wrapper"));
 
             this.completer.expandCompletions = true;
+
+            // Move login to top of page
+            var container = $('<div id="mobile-login" class="mobile-header-item"/>').appendTo($('header'));
+            var link = $("#user a");
+            if (link.parent().is('h3')) {
+                // Not logged in
+                link.html('Log In');
+            }
+            else {
+                link.html('Log Out');
+            }
+            link.appendTo(container);
+            $("#user").remove();
         }
 
         setInterval($.proxy(this.updatePrompt, this), 100);
@@ -333,9 +354,8 @@ SymPy.Shell = Class.$extend({
 
     renderToolbar: function(settings) {
         this.toolbarEl = $('<p/>').
-            addClass('sympy-live-toolbar').
             append(
-                $('<div/>').append([
+                $('<div/>').append(
                     $('<label for="output-format">Output Format</label>'),
                     $('<select id="output-format"/>').append(
                         $('<option value="repr">Repr</option>'),
@@ -344,21 +364,21 @@ SymPy.Shell = Class.$extend({
                         $('<option value="unicode">Unicode</option>'),
                         $('<option value="latex">LaTeX</option>')
                     )
-                ]),
-                $('<div/>').append([
+                ),
+                $('<div/>').append(
                     $('<label for="submit-behavior">Submit with</label>'),
                     $('<select id="submit-behavior"/>').append(
                         $('<option value="enter">Enter</option>'),
                         $('<option value="shift-enter">Shift-Enter</option>')
                     )
-                ]),
-                $('<div/>').append([
+                ),
+                $('<div/>').append(
                     $('<label for="privacy">Privacy</label>'),
                     $('<select id="privacy"/>').append(
                         $('<option value="on">On</option>'),
                         $('<option value="off">Off</option>')
                     )
-                ])
+                )
             );
         this.toolbarEl.appendTo(settings);
         this.supportsSelection = 'selectionStart' in this.promptEl.get(0);
@@ -377,18 +397,18 @@ SymPy.Shell = Class.$extend({
         this.recordEl.children('option')[index].selected = true;
 
         if (!this.isPhone) {
-            this.toolbarEl.append([
-                $('<div/>').append([
+            this.toolbarEl.append(
+                $('<div/>').append(
                     $('<label for="autocomplete">Complete with</label>'),
                     $('<select id="autocomplete"/>').append(
                         $('<option value="tab">Tab</option>'),
                         $('<option value="ctrl-space">Ctrl-Space</option>')
                     )
-                ]),
-                $('<div/>').append([
+                ),
+                $('<div/>').append(
                     $('<span>Ctrl-Up/Down for history</span>')
-                ])
-            ]);
+                )
+            );
             this.autocompleteEl = this.toolbarEl.find('select:nth(3)');
             index = this.autocompleteTypes.indexOf(this.autocomplete);
             this.autocompleteEl.children('option')[index].selected = true;
@@ -748,6 +768,7 @@ SymPy.Shell = Class.$extend({
     },
 
     updateHistory: function(value) {
+        // TODO: is this function written incorrectly?
         this.historyCursor = this.history.length - 1;
         this.history[this.historyCursor] = value;
     },
@@ -777,8 +798,11 @@ SymPy.Shell = Class.$extend({
         }
     },
 
-    prefixStatement: function() {
-        var lines = this.getValue().split('\n');
+    prefixStatement: function(statement) {
+        if (typeof statement === "undefined") {
+            statement = this.getValue();
+        }
+        var lines = statement.split('\n');
 
         lines[0] = ">>> " + lines[0];
 
@@ -864,17 +888,17 @@ SymPy.Shell = Class.$extend({
 
             this.scrollToDefault();
 
-			if (navigator.userAgent.match(/like Mac OS X/i)) {
+            if (navigator.userAgent.match(/like Mac OS X/i)) {
                 timeout = 58; // On an iOS Device
-			} else {
-				timeout = 61; // Not iOS based
-			}
+                } else {
+            timeout = 61; // Not iOS based
+                }
 
             $.ajax({
                 type: 'POST',
                 url: (this.basePath || '') + '/evaluate',
                 dataType: 'json',
-				timeout: (timeout * 1000),
+                timeout: (timeout * 1000),
                 data: JSON.stringify(data),
                 success: $.proxy(function(response, status) {
                     this.done(response);
@@ -883,6 +907,16 @@ SymPy.Shell = Class.$extend({
                 error: $.proxy(this.error, this),
             });
             this.focus();
+        }
+    },
+
+    queueStatement: function(statement) {
+        this.queuedStatements.push(statement);
+    },
+
+    dequeueStatement: function() {
+        if (this.queuedStatements.length !== 0) {
+            this.setValue(this.queuedStatements.shift());
         }
     },
 
@@ -912,6 +946,11 @@ SymPy.Shell = Class.$extend({
         }
 
         this.setEvaluating(false);
+
+        if (this.queuedStatements.length !== 0) {
+            this.dequeueStatement();
+            this.evaluate();
+        }
     },
 
     error: function(xhr, status, error) {
@@ -928,10 +967,11 @@ SymPy.Shell = Class.$extend({
 
         $('<div/>').html(errorMessage).appendTo(this.outputEl);
 
-		this.scrollToDefault();
+        this.scrollToDefault();
         this.clearValue();
         this.updatePrompt();
         this.setEvaluating(false);
+        this.queuedStatements = [];
     },
 
     clear: function() {
@@ -1067,18 +1107,32 @@ SymPy.Shell = Class.$extend({
         this.fullscreenMode = false;
     },
 
-    makeOneOffURL: function() {
-        $('.sympy-live-dialog').remove();
+    makeURL: function(statements) {
         var component = encodeURIComponent(this.getValue());
         var url = window.location.origin + window.location.pathname + '?evaluate=';
+
+        return url + encodeURIComponent(statements);
+    },
+
+    makeOneOffURL: function() {
+        $('.sympy-live-dialog').remove();
         var offset = this.makeOneOffEl.offset();
         var outerHeight = this.makeOneOffEl.outerHeight();
         var dialog = $('<div/>')
             .appendTo($('body'))
             .addClass('sympy-live-dialog');
-        var output = $('<div><p>click outside to close</p></div>');
+        var output = $('<div/>');
         dialog.append(output);
-        dialog.fadeIn(250);
+        dialog.css('opacity', 0);
+
+        var close = function() {
+            dialog.css('opacity', 0);
+            setTimeout(function() { dialog.remove() }, 300);
+        };
+
+        output.append($('<button><i class="icon-collapse-top"></i> Close</button>').click(function() {
+            close();
+        }));
 
         output.append($('<p> This is your history. The #-- comments separate individual statements to be executed and will be removed from the output.</p>'));
         var history = $('<textarea/>');
@@ -1086,29 +1140,26 @@ SymPy.Shell = Class.$extend({
         history.val(contents);
         output.append(history);
 
-        var close = function() {
-            dialog.fadeOut(500);
-        };
-
-        output.append($('<button>Make URL</button>').click(function() {
+        var makeButton = $('<button><i class="icon-ok"></i> Make URL</button>');
+        makeButton.click($.proxy(function() {
             close();
-            window.open(url + encodeURIComponent(history.val()));
-        }));
+            window.open(this.makeURL(history.val()));
+        }, this));
+        output.append(makeButton);
 
-        output.click(function(e) {
-            e.stopPropagation();
-        });
-        dialog.click(close);
         $('body').keydown(function(e) {
             if (e.which == SymPy.Keys.ESC) {
                 close();
             }
         });
-        setTimeout(function() {
-            $('body').click(function() {
-                close();
-            });
-        }, 500);
+
+        if (this.isMobile) {
+            $('body').scrollTop(0);
+        }
+
+        // show the dialog
+        // we're using CSS to animate
+        setTimeout(function() { dialog.css('opacity', 1); }, 100);
     },
 
     evaluateInitial: function(statements) {
@@ -1126,7 +1177,7 @@ SymPy.Shell = Class.$extend({
         this.evaluate();
     },
 
-    focus: function(){
+    focus: function() {
         this.promptEl.focus();
     }
 });
