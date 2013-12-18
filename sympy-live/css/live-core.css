@@ -322,10 +322,14 @@
     height: 15em;
   }
 
+  .sympy-live-caret {
+    width: 2.5em;
+  }
+
   .sympy-live-prompt {
-    width: -moz-calc(100% - 3em - 30px);
-    width: -webkit-calc(100% - 3em - 30px);
-    width: calc(100% - 3em - 30px);
+    width: -moz-calc(100% - 2.5em - 30px);
+    width: -webkit-calc(100% - 2.5em - 30px);
+    width: calc(100% - 2.5em - 30px);
   }
 
   .sympy-live-prompt, .sympy-live-caret {
