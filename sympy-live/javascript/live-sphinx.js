@@ -64,6 +64,11 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         }
 
         this.showStoredSession();
+        $(window).resize($.proxy(function() {
+            if (this.isDockedToRight()) {
+                this.adjustOutputHeight();
+            }
+        }, this));
     },
 
     renderToolbar: function(settings) {
