@@ -255,14 +255,20 @@
 }
 
 .fullscreen .sympy-live-caret {
-  width: 5em;
+  width: 10%;
+  width: -moz-calc(3em);
+  width: -webkit-calc(3em);
+  width: calc(3em);
 }
 
 .fullscreen .sympy-live-prompt {
   position: absolute;
-  left: 5em;
+  left: 4.25em;
   right: 1.25em;
-  width: auto;
+  width: 90%;
+  width: -moz-calc(100% - 5.5em);
+  width: -webkit-calc(100% - 5.5em);
+  width: calc(100% - 5.5em);
 }
 
 #main.fullscreen h1 {
