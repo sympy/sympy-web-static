@@ -20,6 +20,8 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     },
 
     render: function(el) {
+        // Set basePath so completer makes request to correct server
+        this.basePath = 'http://live.sympy.org';
         this.$super(el);
 
         this.shellEl = $(el);
@@ -312,8 +314,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             fullHeight -= $('#shell .sympy-live-autocompletions-container').outerHeight(true);
             fullHeight -= $('#shell .sympy-live-toolbar').outerHeight(true);
             fullHeight -= $('#settings').outerHeight(true);
-            fullHeight -= adjustment;
-
+            fullHeight += adjustment;
             this.outputEl.height(fullHeight);
         }
     },
@@ -399,14 +400,14 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             var height = content.css('height', 'auto').height();
             content.height(0).height(height);
             if (this.isDockedToRight()) {
-                this.adjustOutputHeight(height);
+                this.adjustOutputHeight(-height);
             }
         }
         else {
             var height = content.css('height', 'auto').height();
             content.height(0);
             if (this.isDockedToRight()) {
-                this.adjustOutputHeight(-height);
+                this.adjustOutputHeight();
             }
         }
     },
