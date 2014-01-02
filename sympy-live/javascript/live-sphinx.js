@@ -451,7 +451,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             window.localStorage.removeItem('inputs');
             window.localStorage.removeItem('outputs');
         }
-
+        this.eraseCookie('sympy-session');
     },
 
     fullscreen: function() {
