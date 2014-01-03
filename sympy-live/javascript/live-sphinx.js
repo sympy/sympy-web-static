@@ -7,6 +7,12 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     __init__: function(config) {
         this.$super(config);
         this.visible = this.getCookie('sympy-visible', false);
+        if (this.visible === "false") {
+            this.visible = false;
+        }
+        else if (this.visible === "true") {
+            this.visible = true;
+        }
 
         var index = this.evalModeTypes.indexOf(config.evalMode);
         this.evalMode = (index == -1) ? this.getCookie('sympy-evalMode', 'eval') : config.evalMode;
