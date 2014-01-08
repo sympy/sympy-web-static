@@ -983,6 +983,7 @@ SymPy.Shell = Class.$extend({
 
         this.clearValue();
         this.historyCursor = this.history.length-1;
+        delete this.session;
 
         this.completer.finishComplete();
     },
@@ -1018,6 +1019,13 @@ SymPy.Shell = Class.$extend({
         }
 
         return (result) ? result : default_value;
+    },
+
+    eraseCookie: function(name) {
+        var expiration = new Date();
+        expiration.setTime(date.getTime() - 24 * 60 * 60 * 1000);
+        value = "; expires=" + expiration.toUTCString();
+        document.cookie = name + "=" + value;
     },
 
     fullscreen: function() {

@@ -7,6 +7,12 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     __init__: function(config) {
         this.$super(config);
         this.visible = this.getCookie('sympy-visible', false);
+        if (this.visible === "false") {
+            this.visible = false;
+        }
+        else if (this.visible === "true") {
+            this.visible = true;
+        }
 
         var index = this.evalModeTypes.indexOf(config.evalMode);
         this.evalMode = (index == -1) ? this.getCookie('sympy-evalMode', 'eval') : config.evalMode;
@@ -20,6 +26,8 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     },
 
     render: function(el) {
+        // Set basePath so completer makes request to correct server
+        this.basePath = 'http://live.sympy.org';
         this.$super(el);
 
         this.shellEl = $(el);
@@ -62,6 +70,11 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         }
 
         this.showStoredSession();
+        $(window).resize($.proxy(function() {
+            if (this.isDockedToRight()) {
+                this.adjustOutputHeight();
+            }
+        }, this));
     },
 
     renderToolbar: function(settings) {
@@ -312,8 +325,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             fullHeight -= $('#shell .sympy-live-autocompletions-container').outerHeight(true);
             fullHeight -= $('#shell .sympy-live-toolbar').outerHeight(true);
             fullHeight -= $('#settings').outerHeight(true);
-            fullHeight -= adjustment;
-
+            fullHeight += adjustment;
             this.outputEl.height(fullHeight);
         }
     },
@@ -399,14 +411,14 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             var height = content.css('height', 'auto').height();
             content.height(0).height(height);
             if (this.isDockedToRight()) {
-                this.adjustOutputHeight(height);
+                this.adjustOutputHeight(-height);
             }
         }
         else {
             var height = content.css('height', 'auto').height();
             content.height(0);
             if (this.isDockedToRight()) {
-                this.adjustOutputHeight(-height);
+                this.adjustOutputHeight();
             }
         }
     },
@@ -445,7 +457,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             window.localStorage.removeItem('inputs');
             window.localStorage.removeItem('outputs');
         }
-
+        this.eraseCookie('sympy-session');
     },
 
     fullscreen: function() {
