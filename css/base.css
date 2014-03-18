@@ -142,8 +142,7 @@ header img {
 /* Body content */
 
 #main {
-  padding: 0 0.25em;
-  margin-top: 3em;
+  margin-top: 4em;
 }
 
 #content {
@@ -151,6 +150,41 @@ header img {
   border-radius: 7px;
   padding: 0.25em 0.5em;
   border: 1px solid #CCC;
+}
+
+#banner {
+  background: #3B5526;
+  color: #FFF;
+  border-radius: 7px;
+  padding: 0.25em 0.5em;
+  border: 1px solid #CCC;
+  margin-bottom: 2em;
+}
+
+#banner h2 {
+  color: #FFF;
+  font-size: 1.75em;
+  font-weight: 300;
+}
+
+#banner a:link, #banner a:visited, #banner a:hover, #banner a:active {
+  color: #81B953;
+}
+
+#get-started a {
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  background: #370C19;
+  color: #FFF !important;
+  border-radius: 3px;
+  -moz-transition: all .3s ease-in-out;
+  -webkit-transition: all .3s ease-in-out;
+  -o-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+}
+
+#get-started a:hover {
+  background: #552634;
 }
 
 .inner {
@@ -196,8 +230,8 @@ header img {
 #search-gamma button {
   margin: 0 auto;
   display: block;
-  border-radius: 0 0 3px 3px;
   padding: 0.5em 0.75em;
+  border-radius: 0 0 3px 3px;
 }
 
 footer {
@@ -206,6 +240,10 @@ footer {
   padding: 0.25em 0.5em;
   margin: 0 0.25em;
   border-radius: 7px;
+}
+
+footer p:last-child {
+  margin-bottom: 0.5em;
 }
 
 footer a:link, footer a:visited, footer a:hover, footer a:active {
@@ -286,10 +324,10 @@ footer a:link, footer a:visited, footer a:hover, footer a:active {
     background: none;
     border: 0;
     border-radius: 5px;
-    -moz-transition: all .3s ease-in;
-    -webkit-transition: all .3s ease-in;
-    -o-transition: all .3s ease-in;
-    transition: all .3s ease-in;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
   }
 
   #main-navigation ul li:hover {
@@ -312,7 +350,7 @@ footer a:link, footer a:visited, footer a:hover, footer a:active {
     margin-top: 0;
   }
 
-  #content {
+  #content, #banner {
     padding: 1em;
   }
 
@@ -320,7 +358,7 @@ footer a:link, footer a:visited, footer a:hover, footer a:active {
     font-size: 0.9em;
   }
 
-  .sidebar_card, #content {
+  .sidebar_card, #content, #banner {
     box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
   }
 }
@@ -361,14 +399,22 @@ h3 {
   font-size: 1.25em;
 }
 
+h4 {
+  font-style: italic;
+}
+
 #content ul, #sidebar ul {
   list-style-type: disc;
   margin: 0.5em 0 0.5em 2em;
 }
 
+#content ul ul {
+  margin: 0 0 0 2em;
+}
+
 p {
   margin-top: 0.5em;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 a:link {
@@ -427,4 +473,126 @@ select {
 
 input, button, textarea {
   border-radius: 0;
+}
+
+sup {
+  vertical-align: super;
+}
+
+strong {
+  font-weight: bolder;
+}
+
+code {
+  font-family: monospace;
+}
+
+.dropdown {
+  border-bottom: 2px dotted #CCC;
+  padding-bottom: 0.5em;
+}
+
+.dropdown h3 {
+  cursor: pointer;
+}
+
+.dropdown h3:before {
+  font-family: FontAwesome;
+  content: "\f107";
+  margin-right: 0.25em;
+  display: inline-block;
+}
+
+.dropdown.open h3:before {
+  -moz-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.dropdown div {
+  display: none;
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -ms-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+  transition: all 300ms ease-out;
+  overflow: hidden;
+}
+
+.dropdown.open div {
+  display: block;
+}
+
+.gallery figure {
+  display: inline-block;
+  width: 24%;
+  border: 1px solid #CCC;
+  cursor: pointer;
+}
+
+.gallery figure:hover {
+  border: 1px solid #999;
+}
+
+.gallery figure img {
+  width: 100%;
+  height: 100px;
+}
+
+.gallery figure figcaption {
+  display: block;
+  max-width: 90%;
+  margin: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gallery figure figcaption code {
+  white-space: pre;
+}
+
+#slideshow {
+  z-index: 1000;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  color: #FFF;
+}
+
+#slideshow img {
+  max-height: 80%;
+  margin: 5% auto 0;
+  display: block;
+}
+
+#slideshow p {
+  width: 80%;
+  text-align: center;
+  font-size: 1.5em;
+  margin: auto;
+  display: block;
+}
+
+#slideshow p code {
+  text-align: left;
+  white-space: pre;
+  display: block;
+  color: #000;
+  background: #DDD;
+  margin: 0.5em 0;
+}
+
+#slideshow button.close {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: none;
+  border: none;
+  color: #FFF;
+  font-size: 2em;
 }

@@ -1,5 +1,4 @@
 .small { font-size:11px; }
-.gray { color:#a2b0b6; }
 .hightlight { background-color:#d6e7c7; }
 a:link { color: #4FAF00; text-decoration: none; }
 a:visited, a:active { text-decoration: none; color: #577C37; }
@@ -110,22 +109,6 @@ hr {
   padding-left: 20px;
 }
 
-#footer .block {  
-  color: #FFF;
-  background: #3B5526;
-  max-width: 800px;
-  min-width: 500px;
-}
-
-#footer .block p {      
-  margin: 0;  
-  padding: 5px;
-}
-
-#footer a:link, #footer a:visited, #footer a:hover, #footer a:active {
-  color: #81B953;
-}
-
 /* tables */
 
 
@@ -164,31 +147,6 @@ hr {
   font-size: .9em;
 }
 
-/* flash-messages */
-.flash .message {
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  text-align:center;
-  margin: 0 auto 15px;
-
-}
-
-.flash .message p {
-  margin:8px;
-}
-.flash .error {
-  border: 1px solid #fbb;
-  background-color: #fdd;
-}
-.flash .warning {
-  border: 1px solid #fffaaa;
-  background-color: #ffffcc;
-}
-.flash .notice {
-  border: 1px solid #1FDF00;
-  background-color: #BBFFB6;
-}
-
 /* lists */
 
 ul.list li {
@@ -202,64 +160,6 @@ ul.list li .item .avatar {
   border-width: 1px;
   border-style: solid;
   padding: 2px; 
-}
-
-/* box */
-
-#box .block {
-  background: #FFF;  
-}
-
-#box .block h2 {
-  color: #fff;
-  background: #3B5526;
-}
-
-#box .block .content { border: 1px solid #81b953; }
-
-/* login */
-
-#block-login {   }
-#block-login h2 { background: #3B5526;border-bottom: 5px solid #81b953;}
-
-.callout img {
-  float:left;
-  margin-right: 8px;
-}
-
-
-#mainpage {
-  min-width:960px;
-  min-height:500px;
-  padding:0 20px;
-  margin-top:20px;
-}
-
-#left{
-  padding:10px 10px 10px 10px;
-  overflow:hidden;
-  background-color:white;
-  min-width:300px;
-  max-width:300px;
-  float:right;
-  border-color:#81B953;
-  border-width:2px;
-  border-style:solid;
-  margin: 4px 0px 4px 4px;
-}
-
-#right2{
-  padding: 10px 10px 10px 10px;
-  overflow:hidden;
-  border-color:#81B953;
-  border-width:1px;
-  border-style:solid;
-  background-color:white;
-  min-width:350px;
-  max-width:350px;
-  float:right;
-  margin-top:-800px;
-  margin-right:10px;
 }
 
 #main .content, .sidebar_card {
@@ -283,9 +183,4 @@ ul.list li .item .avatar {
   font-family: "Open Sans", Helvetica, sans-serif;
   font-weight: 300;
   font-size: 1.25em;
-}
-
-#side1
-{
-  margin-top: 710px;
 }
