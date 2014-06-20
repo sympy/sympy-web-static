@@ -251,3 +251,15 @@ avoid leaking these styles to the Sphinx docs) */
 #shell #make-one-off-button:hover {
   background-color: #AAA;
 }
+
+.scrolled {
+  box-shadow: 0 0 10px #293b1b;
+}
+
+.transition {
+  -webkit-transition: all 300ms ease-out;
+  -moz-transition: all 300ms ease-out;
+  -ms-transition: all 300ms ease-out;
+  -o-transition: all 300ms ease-out;
+  transition: all 300ms ease-out;
+}

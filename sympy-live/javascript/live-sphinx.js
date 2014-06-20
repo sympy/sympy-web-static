@@ -200,7 +200,26 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
                 el.prepend(container);
 
                 evaluate.click($.proxy(function() {
-                    this.show();
+                    this.show().done(function() {
+                        // Scroll this code block so it is still visible
+                        var block = container.parent();
+                        var offset = (block.offset().top -
+                                      (window.innerHeight / 2) +
+                                      (block.height() / 2));
+                        $('html, body').animate({
+                            scrollTop: offset
+                        }, {
+                            duration: 300,
+                            complete: function() {
+                                var code = block.children('.highlight');
+                                code.addClass('scrolled');
+                                code.addClass('transition');
+                                window.setTimeout(function() {
+                                    code.removeClass('scrolled');
+                                }, 1000);
+                            }
+                        });
+                    });
                     var statementBlocks = el.find('div.live-statement');
                     var codeBlocks = [];
                     for (var i = 0; i < statementBlocks.length; i++) {
@@ -356,7 +375,11 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     },
 
     show: function(duration) {
-        if (this.visible) return;
+        var deferred = new $.Deferred();
+        if (this.visible) {
+            deferred.reject();
+            return deferred;
+        }
 
         if (typeof duration === "undefined") {
             duration = SymPy.DEFAULT_ANIMATION_DURATION;
@@ -383,10 +406,12 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
                     this.dockTo('right');
                     this.adjustOutputHeight();
                 }
+                deferred.resolve();
             }, this));
         this.visible = true;
         this.toggleShellEl.addClass('shown').children('span').
             html("Hide SymPy Live Shell");
+        return deferred;
     },
 
     toggle: function(duration) {
