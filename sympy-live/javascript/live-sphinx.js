@@ -1,5 +1,4 @@
 utilities.namespace("SymPy");
-SymPy.DEFAULT_ANIMATION_DURATION = 500;
 SymPy.SphinxShell = SymPy.Shell.$extend({
     evalModeTypes: ['eval', 'copy'],
     evalMode: 'eval',
@@ -200,7 +199,26 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
                 el.prepend(container);
 
                 evaluate.click($.proxy(function() {
-                    this.show();
+                    this.show({ adjustScroll: false }).done(function() {
+                        // Scroll this code block so it is still visible
+                        var block = container.parent();
+                        var offset = (block.offset().top -
+                                      (window.innerHeight / 2) +
+                                      (block.height() / 2));
+                        $('html, body').animate({
+                            scrollTop: offset
+                        }, {
+                            duration: 300,
+                            complete: function() {
+                                var code = block.children('.highlight');
+                                code.addClass('scrolled');
+                                code.addClass('transition');
+                                window.setTimeout(function() {
+                                    code.removeClass('scrolled');
+                                }, 1000);
+                            }
+                        });
+                    });
                     var statementBlocks = el.find('div.live-statement');
                     var codeBlocks = [];
                     for (var i = 0; i < statementBlocks.length; i++) {
@@ -330,11 +348,29 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
         }
     },
 
-    hide: function(duration) {
-        this.dockTo('bottom');
-        if (typeof duration === "undefined") {
-            duration = SymPy.DEFAULT_ANIMATION_DURATION;
+    findTopmostVisibleElement: function() {
+        var elements = $('.section *:not(.section):visible');
+        var viewTop = $(window).scrollTop();
+        var viewBottom = viewTop + $(window).height();
+        for (var i = 0; i < elements.length; i++) {
+            var element = $(elements[i]);
+            var offset = element.offset().top + element.height();
+            if (offset >= viewTop && offset <= viewBottom) {
+                return element;
+            }
         }
+    },
+
+    adjustPageScroll: function(topmost) {
+        $('html,body').animate({
+            scrollTop: topmost.offset().top
+        }, 300);
+    },
+
+    hide: function(options) {
+        var topmost = this.findTopmostVisibleElement();
+
+        this.dockTo('bottom');
         this.disablePrompt();
         this.adjustOutputHeight();
 
@@ -348,19 +384,25 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             width: 0,
             height: 0,
             opacity: 0
-        }, duration);
+        }, {
+            duration: 300,
+            complete: $.proxy(function() {
+                this.adjustPageScroll(topmost);
+            }, this)
+        });
         this.visible = false;
 
         this.toggleShellEl.removeClass('shown').children('span').
             html("Show SymPy Live Shell");
     },
 
-    show: function(duration) {
-        if (this.visible) return;
-
-        if (typeof duration === "undefined") {
-            duration = SymPy.DEFAULT_ANIMATION_DURATION;
+    show: function(options) {
+        var deferred = new $.Deferred();
+        if (this.visible) {
+            deferred.reject();
+            return deferred;
         }
+
         if (typeof this.shellDimensionsRestored === "undefined") {
             this.shellDimensionsRestored = {};
             // Quickly show the shell and get its height
@@ -369,11 +411,14 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             this.shellDimensionsRestored.width = shell.width();
             shell.css('display', 'none');
         }
+
+        var topmost = this.findTopmostVisibleElement();
+
         this.enablePrompt();
         var shell = $(this.shellEl).css('display', 'block').width(0).height(0);
         $(this.shellEl).animate(
             this.shellDimensionsRestored,
-            duration,
+            300,
             $.proxy(function() {
                 // Don't fix the height so that if the settings are
                 // expanded, the shell will expand with them
@@ -382,22 +427,25 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
                 if (this.isDockedToRight()) {
                     this.dockTo('right');
                     this.adjustOutputHeight();
+
+                    if (!options || options.adjustScroll !== false) {
+                        this.adjustPageScroll(topmost);
+                    }
                 }
+                deferred.resolve();
             }, this));
         this.visible = true;
         this.toggleShellEl.addClass('shown').children('span').
             html("Hide SymPy Live Shell");
+        return deferred;
     },
 
-    toggle: function(duration) {
-        if (typeof duration === "undefined") {
-            duration = SymPy.DEFAULT_ANIMATION_DURATION;
-        }
+    toggle: function() {
         if (this.isVisible()) {
-            this.hide(duration);
+            this.hide();
         }
         else {
-            this.show(duration);
+            this.show();
         }
         this.setCookie('sympy-visible', this.visible);
     },
