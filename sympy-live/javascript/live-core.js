@@ -1030,6 +1030,7 @@ SymPy.Shell = Class.$extend({
 
     fullscreen: function() {
         if (!this.fullscreenMode) {
+            this.fullscreenEl.html('Exit Fullscreen');
             var popup = $('<div class="sympy-live-fullscreen-popup">Escape to close fullscreen mode.</div>');
             popup.prependTo($(document.body)).css({
                 'font-size': 20,
@@ -1095,7 +1096,8 @@ SymPy.Shell = Class.$extend({
     },
 
     closeFullscreen : function() {
-        if(this.fullscreenMode) {
+        if (this.fullscreenMode) {
+            this.fullscreenEl.html('Fullscreen');
             var main = $("#main");
             main.removeClass('fullscreen');
             main.find('#sidebar').show();
