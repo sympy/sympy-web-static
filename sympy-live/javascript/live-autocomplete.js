@@ -83,7 +83,8 @@ SymPy.Completer = Class.$extend({
             }
             this.shell.focus();
         }, this));
-        this.outputEl = $("<ol />", {class: 'sympy-live-completions'})
+        this.outputEl = $("<ol />")
+            .addClass('sympy-live-completions')
             .append($("<em>Completions here</em>"));
         this.containerEl.append(this.outputEl);
         this.disableButtons(["prev", "next", "expand"]);
@@ -92,6 +93,7 @@ SymPy.Completer = Class.$extend({
     complete: function(statement, selection) {
         if (statement === this.replaceText) {
             if (this.completionRequest !== null) {
+                // User tabbed twice - wants to insert first completion
                 this.completionRequest.done($.proxy(function() {
                     // check again to avoid race conditions
                     if (statement === this.replaceText) {
@@ -125,16 +127,41 @@ SymPy.Completer = Class.$extend({
                 session: this.shell.session || null,
                 statement: statement
             };
-            this.completionRequest = $.ajax((this.basePath || '') + '/complete', {
+
+            var callbacks = [];
+            var fakeDeferredFinished = false;
+            var fakeDeferred = {
+                done: function(callback) {
+                    if (fakeDeferredFinished) {
+                        callback();
+                    }
+                    else {
+                        callbacks.push(callback);
+                    }
+                }
+            };
+            this.completionRequest = $.ajax({
+                url: (this.basePath || '') + '/complete',
                 type: 'POST',
                 data: JSON.stringify(data),
                 dataType: 'json',
+                success: $.proxy(function(data, textStatus, xhr) {
+                    this.completionSuccess(data);
+                    // Workaround - see below
+                    for (var i = 0; i < callbacks.length; i++) {
+                        callbacks[i]();
+                    }
+                    fakeDeferredFinished = true;
+                }, this),
                 error: $.proxy(function(xhr, textStatus, error) {
                     this.completionError();
                 }, this)
-            }).done($.proxy(function(data, textStatus, xhr) {
-                this.completionSuccess(data);
-            }, this));
+            });
+            if (typeof $.Deferred === "undefined") {
+                // Workaround for jQuery 1.4.x (which Sphinx docs use),
+                // which lacks Deferred
+                this.completionRequest = fakeDeferred;
+            }
         }
     },
 
@@ -217,15 +244,15 @@ SymPy.Completer = Class.$extend({
         }
         else {
             this.finishComplete();
-            this.outputEl.append($("<li><em>&lt;No completions&gt;</em>",
-                                   {class: 'sympy-live-completions-none'}));
+            this.outputEl.append($("<li><em>&lt;No completions&gt;</em>")
+                                 .addClass('sympy-live-completions-none'));
         }
     },
 
     completionError: function() {
         this.outputEl.html('');
-        this.outputEl.append($("<li>&lt;Error getting completions&gt;</li>"),
-                             {class: 'sympy-live-completions-none'});
+        this.outputEl.append($("<li>&lt;Error getting completions&gt;</li>")
+                             .addClass('sympy-live-completions-none'));
     },
 
     showNextGroup: function() {

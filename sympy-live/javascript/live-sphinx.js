@@ -1,4 +1,32 @@
 utilities.namespace("SymPy");
+
+if (typeof $.Deferred === "undefined") {
+    SymPy.Deferred = Class.$extend({
+        __init__: function() {
+            this.status = null;
+            this.callbacks = [];
+        },
+
+        done: function(callback) {
+            if (this.status === "resolved") {
+                callback();
+            }
+            this.callbacks.push(callback);
+        },
+
+        reject: function() {
+            this.status = "rejected";
+        },
+
+        resolve: function() {
+            this.status = "resolved";
+        }
+    });
+}
+else {
+    SymPy.Deferred = $.Deferred;
+}
+
 SymPy.SphinxShell = SymPy.Shell.$extend({
     evalModeTypes: ['eval', 'copy'],
     evalMode: 'eval',
@@ -397,7 +425,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     },
 
     show: function(options) {
-        var deferred = new $.Deferred();
+        var deferred = new SymPy.Deferred();
         if (this.visible) {
             deferred.reject();
             return deferred;
