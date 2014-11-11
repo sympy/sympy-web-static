@@ -53,14 +53,12 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     },
 
     render: function(el) {
-        // Set basePath so completer makes request to correct server
-        this.basePath = 'http://live.sympy.org';
         this.$super(el);
 
         this.shellEl = $(el);
 
         var headerLink =
-            $('<a href="http://live.sympy.org">SymPy Live Shell</a>');
+            $('<a>SymPy Live Shell</a>').attr('href', this.basePath);
         var header = $("<h2/>").append(headerLink);
         this.shellEl.prepend(header);
 
@@ -537,11 +535,11 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     },
 
     fullscreen: function() {
-        window.open("http://live.sympy.org");
+        window.open(this.basePath);
     },
 
     makeURL: function(statements) {
-        return 'http://live.sympy.org/?evaluate=' + encodeURIComponent(statements);
+        return this.basePath + '/?evaluate=' + encodeURIComponent(statements);
     },
 
     updateSettings: function() {
