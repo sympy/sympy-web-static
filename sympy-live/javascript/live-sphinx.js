@@ -1,4 +1,32 @@
 utilities.namespace("SymPy");
+
+if (typeof $.Deferred === "undefined") {
+    SymPy.Deferred = Class.$extend({
+        __init__: function() {
+            this.status = null;
+            this.callbacks = [];
+        },
+
+        done: function(callback) {
+            if (this.status === "resolved") {
+                callback();
+            }
+            this.callbacks.push(callback);
+        },
+
+        reject: function() {
+            this.status = "rejected";
+        },
+
+        resolve: function() {
+            this.status = "resolved";
+        }
+    });
+}
+else {
+    SymPy.Deferred = $.Deferred;
+}
+
 SymPy.SphinxShell = SymPy.Shell.$extend({
     evalModeTypes: ['eval', 'copy'],
     evalMode: 'eval',
@@ -25,14 +53,12 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     },
 
     render: function(el) {
-        // Set basePath so completer makes request to correct server
-        this.basePath = 'http://live.sympy.org';
         this.$super(el);
 
         this.shellEl = $(el);
 
         var headerLink =
-            $('<a href="http://live.sympy.org">SymPy Live Shell</a>');
+            $('<a>SymPy Live Shell</a>').attr('href', this.basePath);
         var header = $("<h2/>").append(headerLink);
         this.shellEl.prepend(header);
 
@@ -397,7 +423,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     },
 
     show: function(options) {
-        var deferred = new $.Deferred();
+        var deferred = new SymPy.Deferred();
         if (this.visible) {
             deferred.reject();
             return deferred;
@@ -509,11 +535,11 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     },
 
     fullscreen: function() {
-        window.open("http://live.sympy.org");
+        window.open(this.basePath);
     },
 
     makeURL: function(statements) {
-        return 'http://live.sympy.org/?evaluate=' + encodeURIComponent(statements);
+        return this.basePath + '/?evaluate=' + encodeURIComponent(statements);
     },
 
     updateSettings: function() {
