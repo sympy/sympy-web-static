@@ -212,7 +212,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     },
 
     processCodeBlocks: function() {
-        $('.highlight-python').each($.proxy(function(index, el) {
+        $('.highlight-python,.highlight-default').each($.proxy(function(index, el) {
             var el = $(el);
             var promptsFound = this.processIndividualCodeBlocks(el.find('pre'));
 
