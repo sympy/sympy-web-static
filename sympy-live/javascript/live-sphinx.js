@@ -212,7 +212,7 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
     },
 
     processCodeBlocks: function() {
-        $('.highlight-python').each($.proxy(function(index, el) {
+        $('.highlight-python,.highlight-default').each($.proxy(function(index, el) {
             var el = $(el);
             var promptsFound = this.processIndividualCodeBlocks(el.find('pre'));
 
@@ -311,8 +311,9 @@ SymPy.SphinxShell = SymPy.Shell.$extend({
             for (var i = 0; i < lines.length; i++) {
                 var line = $('<div />');
                 var processingLine = lines[i];
-                var firstLineContent = processingLine[0].textContent ||
-                    processingLine[0].innerText;
+                var firstLineContent =
+                    (processingLine[0].textContent || processingLine[0].innerText) +
+                    (processingLine[1].textContent || processingLine[1].innerText);
                 if (firstLineContent.substr(0, 4) === ">>> ") {
                     foundPrompt = true;
 
