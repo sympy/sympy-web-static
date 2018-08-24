@@ -137,7 +137,7 @@ SymPy.Shell = Class.$extend({
     submit: null,
     tabWidth: 4,
     basePath: null,
-    defaultBasePath: 'http://live.sympy.org',
+    defaultBasePath: 'https://live.sympy.org',
     autocompleter: null,
 
     __init__: function(config) {
