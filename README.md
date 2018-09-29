@@ -24,5 +24,7 @@ Usage:
   - "SymPy Green": #3B5526 (use for backgrounds)
       - Contrasting color: #81B953 (backgrounds, text)
       - Use #FFFFFF (white) for text with this background
+      - Use #567E35 (use for popup buttons)
+      - Use #CCC (use for highlight current version background in Other version)
   - "SymPy Red": #552634 (use for buttons)
       - Use #FFFFFF (white) for text with this background
