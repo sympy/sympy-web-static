@@ -172,8 +172,8 @@
 
 /* Sidebar card-specific styling */
 
-.sidebar_card h3:first-child {
-  cursor: pointer;
+.sidebar_card h3:first-child > a {
+  display: block;
 }
 
 .sidebar_card .clickable_top h3:first-child:before {
