@@ -1,27 +1,43 @@
 // JavaScript for the main SymPy website. See /static/sympy-live/javascript
 // for SymPy Live's code.
 $(document).ready(function() {
-    if (screen.width <= 767) {
-        var el = $('#main-navigation ul');
-        var visible = false;
-        el.hide();
 
-        $('#mobile-menu').click(function() {
-            $(this).toggleClass('active');
+    // State variable that determines whether menu is visible or not on mobile
+    var visibleMobileMenu = false;
 
-            if (visible) {
-                el.css('opacity', 0);
-                setTimeout(function() {
-                    el.hide();
-                }, 300);
-                visible = false;
+    // Toggle `#main-navigation ul` element visibility on mobile
+    $('#mobile-menu').click(function() {
+        var menuEl = $('#main-navigation ul');
+        $(this).toggleClass('active');
+        if (visibleMobileMenu) {
+            menuEl.css('opacity', 0);
+            setTimeout(function() {
+                menuEl.hide();
+            }, 300);
+            visibleMobileMenu = false;
+        } else {
+            menuEl.show().css('opacity', 1);
+            visibleMobileMenu = true;
+        }
+    });
+
+    // Determines whether to the `#main-navigation ul` element is visible or not
+    function show_responsive_menu() {
+        var menuEl = $('#main-navigation ul');
+        if (window.innerWidth <= 767) {                                // mobile            
+            if (visibleMobileMenu) {
+                menuEl.show().css('opacity', 1);
+            } else {
+                menuEl.hide();
             }
-            else {
-                el.show().css('opacity', 1);
-                visible = true;
-            }
-        });
+        } else {                                                      // desktop
+            menuEl.show().css('opacity', 1);
+        }
     }
+    show_responsive_menu();
+    window.onresize = function() {
+        show_responsive_menu();
+    };
 
     var examples = [
         "integrate(1 / (1 + x^2))",
